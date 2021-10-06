@@ -1,21 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from .models import Profile, Post
 
 
-class ProfilePage(TemplateView):
-    template_name = 'profile.html'
-
-    def get_p(self, request):
-        person = Profile.objects.all()
-        ctx = {
-            'profile': person
-        }
-
-        return JsonResponse(ctx)
-        return render(request, self.template_name, ctx)
+def post_list(request):
+    """прозвонка шаблона с БД"""
+    posts = Post.objects.all()
+    context = {'posts': posts}
+    return render(request, 'user/profile.html', context=context)
 
 
 
