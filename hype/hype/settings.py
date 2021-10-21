@@ -54,11 +54,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'hype.urls'
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,6 +142,7 @@ LOGIN_REDIRECT_URL = 'profile/' #позже заменить на страниц
 #default settings for rest_framework"
 REST_FRAMEWORK = {
     'DEFAULT_RENDER_CLASSES': (
+    'rest_framework.renderers.TemplateHTMLRenderer'   
     'rest_framework.renderers.JSONRenderer',
     'rest_framework.renderers.BrowsableAPIRenderer',
     ),

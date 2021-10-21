@@ -46,6 +46,7 @@ class Post(models.Model):
 
 
 class SocialLink(models.Model):
+    '''link for social'''
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='social_links')
     link = models.URLField(max_length=180)
 
@@ -54,6 +55,7 @@ class SocialLink(models.Model):
 
 
 class Follower(models.Model):
+
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owner')
     subscriber = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='subscribers')
 
