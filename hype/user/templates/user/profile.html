@@ -1,5 +1,6 @@
+{% extends "user/posts.html" %}
 {% load rest_framework %}
-
+{% load static %}
 
 <html lang="en">
   <head>
@@ -7,19 +8,17 @@
     <meta charset="utf-8">
     <title>Profile</title>
   </head><body>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <h1>Profiles</h1>
-<ul>
-    {% for profile in profiles %}
-     {% if user.is_authenticated %}
-      {{ profile.name }}
-       <p>{{ profile.login }}</p>
-       <p>
-          {{ profile.bio }}
-          {{ profile.date_birth }}
-       </p>
-      {% endif %}
-    {% endfor %}
-</ul>
+{% block content%}
+{% if user.is_authenticated %}
+       {% for profile in profiles %}
+      <H2>{{profile.login}}</H2>
+      <p>NAME:{{profile.name}}</p>
+      <p>BIO:{{profile.bio}}</p>
+      <p>BIRTHDAY:{{profile.date_birth}}</p>
+        {% endfor %}
+   {% endif %}
+  </ul>
+{% endblock %}
+    </div>
 </body></html>

@@ -6,7 +6,8 @@ from rest_framework import routers
 
 urlpatterns = [
     path('profile/', views.ShowProfile.as_view()),
-    path('', views.ShowPost.as_view())
+    path('', views.ShowPost.as_view()),
+    path('profile/', views.ShowPersonPost.as_view()),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
 
