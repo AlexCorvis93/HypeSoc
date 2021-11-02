@@ -9,12 +9,13 @@ class Profile(models.Model):
     class Meta:
         db_table = "профиль"
 
-    login = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='user_login', unique=True, default=None)
-    name = models.CharField(max_length=111, default='')
+    login = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='user_login', unique=True, default='')
+    name = models.CharField(max_length=90,  default='')
+    last_name = models.CharField(max_length=90,  default='')
     date_birth = models.DateField(max_length=9)
     email = models.EmailField(max_length=100, unique=True, null=True, blank=True)
     bio = models.TextField(max_length=140)
-    ava = models.ImageField(upload_to='avatar/', blank=True, null=True)
+    ava = models.ImageField(upload_to='avatar/', blank=True, null=True, default="add photo")
 
     @property
     def is_authenticated(self):
@@ -38,8 +39,13 @@ class Post(models.Model):
     title = models.CharField(max_length=140)
     text = models.TextField(verbose_name='text')
     category = models.PositiveSmallIntegerField('category', choices=Category_choices)
-    autor = models.ForeignKey(Profile, default='', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, default='', on_delete=models.CASCADE)
     public_time = models.DateTimeField(default=timezone.now)
+
+    @property
+    def is_authenticated(self):
+        """examination if user is authentificated"""
+        return True
 
     def __str__(self):
         return self.title

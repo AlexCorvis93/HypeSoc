@@ -20,7 +20,7 @@
                 <li class="active">
                     {% if user.is_authenticated %}
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{ user.get_username }}</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <ul class="collapse list-unstyled" >
 
                         <li>
                             <a href="/profile/">Profile</a>
@@ -33,43 +33,43 @@
                 <li>
                     <a href="#">About</a>
                 </li>
-                <li>
-                    <a href="/accounts/login">LogIn</a>
-                </li>
                 <li><a href="{% url 'logout' %}">Log out</a></li>
 
             </ul>
 
-
+  <!-- if not authentificated -->
             {% else %}
              <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{ user.get_username }}</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <ul class="collapse list-unstyled" >
 
                 <li>
                     <a href="/accounts/login">LogIn</a>
                 </li>
               {% endif %}
+                    </ul>
         </nav>
 
-        <!-- Page Content  -->
+        <!-- Page Posts  -->
 
         <div id="content">
          {% block content %}
 
-
              {% for post in Posts %}
-
+              {% for profile in prof %}
+            {% if profile.login == post.author %}
             <h2>{{post.title}}</h2>
             <p>{{post.text}}</p>
-            <a>{{post.autor}}
+            <a>{{post.author}}
+                <img src="{{MEDIA_URL}}{{ profile.ava.url }}" width='30' height='30'></p>
              {{post.public_time}}
             </a>
-
+            <p>{{post.category}}
             <div class="line"></div>
-
+             {% endif %}
+             {% endfor %}
             {% endfor %}
     </div>
+</div>
 {% endblock %}
-
 
 </body></html>

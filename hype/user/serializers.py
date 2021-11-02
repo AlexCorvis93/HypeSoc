@@ -13,4 +13,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('title', 'text', 'category', 'public_time', 'autor')
+        fields = ('title', 'text', 'category', 'public_time', 'author')
+
+

@@ -1,15 +1,11 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views import generic
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.permissions import IsAuthenticated
-
 from .models import Profile, Post
 from .serializers import ProfileSerializer, PostSerializer
 from rest_framework.response import Response
-
 
 
 class ShowProfile(APIView):
@@ -21,8 +17,8 @@ class ShowProfile(APIView):
 
         def get(self, request):
             queryset = Profile.objects.all().filter(login=request.user)
-
-            return Response({'profiles': queryset})
+            cont = Post.objects.all().filter(author=request.user)
+            return Response({'profiles': queryset, 'post': cont})
 
 
 class ShowPost(APIView):
@@ -31,17 +27,21 @@ class ShowPost(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'user/posts.html'
 
+
     def get(self, request):
         queryset = Post.objects.all()
-        return Response({'Posts': queryset})
+        cont = Profile.objects.all()
+        return Response({'Posts': queryset, 'prof': cont})
 
-class ShowPersonPost(APIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'user/profile.html'
 
-    def get(self, request):
-        queryset = Post.objects.all().filter(autor=request.user)
-        return Response({'Posts': queryset})
+
+# class ShowPersonPost(APIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+#     renderer_classes = [TemplateHTMLRenderer]
+#     template_name = 'user/profile.html'
+#
+#
+#     def get(self, request):
+#         queryset = Post.objects.all().filter(author=request.user)
+#         return Response({'post': queryset})

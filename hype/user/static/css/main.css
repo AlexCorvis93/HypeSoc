@@ -81,7 +81,7 @@ a:focus {
 
 #sidebar ul li a {
     padding: 13px;
-    font-size: 1.1em;
+    font-size: 1.3em;
     display: block;
 }
 
@@ -109,7 +109,7 @@ a[data-toggle="collapse"] {
 }
 
 ul ul a {
-    font-size: 0.9em !important;
+    font-size: 0.5em !important;
     padding-left: 30px !important;
     background: #383a42;
 }
