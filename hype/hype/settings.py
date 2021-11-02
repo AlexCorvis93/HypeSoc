@@ -137,7 +137,7 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = '/profile'
+LOGIN_REDIRECT_URL = '/profile' #позже заменить на страницу аккаунта
 LOGOUT_REDIRECT_URL = '/'
 
 #default settings for rest_framework"
@@ -155,3 +155,7 @@ REST_FRAMEWORK = {
 
 }
 
+DJOSER = {
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False, # для проверки отправки имейла, изменить перед диплоем
+}
