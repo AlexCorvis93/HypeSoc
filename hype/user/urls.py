@@ -1,15 +1,15 @@
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
-from . import views
-from rest_framework import routers
-
+from django.urls import path, include
+from .views import *
 
 urlpatterns = [
-    path('profile/', views.ShowProfile.as_view()),
-    path('', views.ShowPost.as_view()),
-    # path('profile_post/', views.ShowPersonPost.as_view()),
+   path('profile/', ShowProfile.as_view(), name='profile'),#personal page
+   path('', ShowPosts.as_view(), name='main'),#main page
+   path('profile/new_post/', post_new, name='new_post'),# create post page
+   path('profile/<int:pk>/', post_detail, name='post_detail')# post detail page
+
+
 ]
-urlpatterns = format_suffix_patterns(urlpatterns)
+
 
 
 

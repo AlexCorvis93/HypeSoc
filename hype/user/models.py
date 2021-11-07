@@ -5,11 +5,11 @@ from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
-    """show user profile"""
+    """show and create user profile"""
     class Meta:
         db_table = "профиль"
 
-    login = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='user_login', unique=True, default='')
+    login = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, verbose_name='login_user', default='')
     name = models.CharField(max_length=90,  default='')
     last_name = models.CharField(max_length=90,  default='')
     date_birth = models.DateField(max_length=9)
@@ -28,18 +28,16 @@ class Profile(models.Model):
 
 class Post(models.Model):
     """custom post"""
-    class Meta:
-        db_table = "пост"
-
     Category_choices = [
         (1, 'Art'),
         (2, 'business'),
         (3, 'science ')
     ]
+
     title = models.CharField(max_length=140)
     text = models.TextField(verbose_name='text')
     category = models.PositiveSmallIntegerField('category', choices=Category_choices)
-    author = models.ForeignKey(User, default='', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     public_time = models.DateTimeField(default=timezone.now)
 
     @property
@@ -51,19 +49,27 @@ class Post(models.Model):
         return self.title
 
 
-class SocialLink(models.Model):
-    '''link for social'''
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='social_links')
-    link = models.URLField(max_length=180)
-
-    def __str__(self):
-        return f'{self.user}'
-
 
 class Follower(models.Model):
 
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owner')
-    subscriber = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='subscribers')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
+    subscriber = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribers')
 
     def __str__(self):
         return f'{self.subscriber} is followed by {self.user}'
+
+
+class Comment(models.Model):
+    """COMMENTS"""
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    name = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    body = models.TextField(max_length='200')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.name, self.post)

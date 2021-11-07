@@ -28,12 +28,15 @@
                         <li>
                             <a href="/">News</a>
                         </li>
+                        <li>
+                            <a href="/profile/new_post/">Create new post</a>
+                        </li>
                     </ul>
                 </li>
                 <li>
                     <a href="#">About</a>
                 </li>
-                <li><a href="{% url 'logout' %}">Log out</a></li>
+                <li><a href="/accoutns/login/">Log out</a></li>
 
             </ul>
 
@@ -54,7 +57,7 @@
         <div id="content">
          {% block content %}
 
-             {% for post in Posts %}
+             {% for post in object_list %}
               {% for profile in prof %}
             {% if profile.login == post.author %}
             <h2>{{post.title}}</h2>
@@ -63,11 +66,14 @@
                 <img src="{{MEDIA_URL}}{{ profile.ava.url }}" width='30' height='30'></p>
              {{post.public_time}}
             </a>
-            <p>{{post.category}}
+            <p>{{post.get_category_display}}
+
+            <h4><a href="{% url 'post_detail' pk=post.pk %}">Comments</a></h4>
             <div class="line"></div>
              {% endif %}
              {% endfor %}
             {% endfor %}
+            {% include "user/paginator.html" with page=page_obj %}
     </div>
 </div>
 {% endblock %}

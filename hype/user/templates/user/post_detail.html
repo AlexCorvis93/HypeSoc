@@ -1,0 +1,45 @@
+{% extends "user/posts.html" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post</title>
+</head>
+{% block content %}
+<body>
+{% if post %}
+<h2>{{post.title}}</h2>
+<P>{{post.text}}
+   {{post.get_category_display}}
+   {{post.author}}
+   {{post.public_time}}
+</P>
+{% endif %}
+{% with comments.count as total_comments %}
+    <h3>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+    </h3>
+{% endwith %}
+{% for comment in comments %}
+    <div class="comment">
+        <p class="info">
+            Comment {{ forloop.counter }} by {{ comment.name }}
+            {{ comment.created }}
+        </p>
+        {{ comment.body|linebreaks }}
+    </div>
+{% empty %}
+    <p>There are no comments yet.</p>
+{% endfor %}
+{% if new_comment %}
+    <h2>Your comment has been added.</h2>
+{% else %}
+    <h2>Add a new comment</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form_comments.as_p }}
+        <p><input type="submit" value="Add comment"></p>
+    </form>
+{% endif %}
+</body>
+{% endblock %}
+</html>

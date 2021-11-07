@@ -142,8 +142,10 @@ LOGOUT_REDIRECT_URL = '/'
 
 #default settings for rest_framework"
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
     'DEFAULT_RENDER_CLASSES': (
-    'rest_framework.renderers.TemplateHTMLRenderer'   
+    'rest_framework.renderers.TemplateHTMLRenderer'
     'rest_framework.renderers.JSONRenderer',
     'rest_framework.renderers.BrowsableAPIRenderer',
     ),
@@ -151,7 +153,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ],
 
 }
 

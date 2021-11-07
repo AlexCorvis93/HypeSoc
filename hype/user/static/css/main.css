@@ -1,12 +1,12 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Gill Sans", sans-serif;
     background: #fafafa;
 }
 
 p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.1em;
+    font-family: "Gill Sans", sans-serif;
+    font-size: 1.2em;
     font-weight: 300;
     line-height: 1.7em;
     color: #999;
@@ -57,7 +57,7 @@ a:focus {
     max-width: 250px;
     background: #383a42;
     color: #fff;
-    transition: all 0.3s;
+    transition: all 0.5s;
 }
 
 #sidebar.active {
@@ -109,7 +109,7 @@ a[data-toggle="collapse"] {
 }
 
 ul ul a {
-    font-size: 0.5em !important;
+    font-size: 1.3em !important;
     padding-left: 30px !important;
     background: #383a42;
 }
@@ -120,7 +120,7 @@ ul.CTAs {
 
 ul.CTAs a {
     text-align: center;
-    font-size: 0.9em !important;
+    font-size: 0.3em !important;
     display: block;
     border-radius: 5px;
     margin-bottom: 5px;

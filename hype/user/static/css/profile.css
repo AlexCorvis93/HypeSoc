@@ -14,7 +14,7 @@ body{
 .progress .progress-bar {
     height: 6px;
     background: #363333;
-    border-radius: 10px;
+    border-radius: 16px;
 }
 
 .progress .progress-bar-title {
@@ -31,7 +31,7 @@ body{
     color: #888888;
     top: -30px;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
 }
 .media {
     display: -webkit-box;
