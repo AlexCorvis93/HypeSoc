@@ -34,7 +34,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#">About</a>
+                    <a href="#">Followers</a>
                 </li>
                 <li><a href="/accoutns/login/">Log out</a></li>
 
@@ -56,7 +56,6 @@
 
         <div id="content">
          {% block content %}
-
              {% for post in object_list %}
               {% for profile in prof %}
             {% if profile.login == post.author %}

@@ -3,6 +3,11 @@ from django.utils import timezone
 from PIL import Image
 from django.contrib.auth.models import User
 
+Category_choices = [
+        (1, 'Art'),
+        (2, 'business'),
+        (3, 'science ')
+    ]
 
 class Profile(models.Model):
     """show and create user profile"""

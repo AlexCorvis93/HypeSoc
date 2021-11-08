@@ -70,6 +70,7 @@
              {{pos.category}}
              {{pos.author}}</p>
             {% endfor %}
+            {% include "user/paginator.html" with page=page_obj %}
         </ul>
       </div>
       {% endfor %}
