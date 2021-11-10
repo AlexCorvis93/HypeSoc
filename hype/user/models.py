@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from PIL import Image
+
 from django.contrib.auth.models import User
 
 Category_choices = [
@@ -44,11 +45,18 @@ class Post(models.Model):
     category = models.PositiveSmallIntegerField('category', choices=Category_choices)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     public_time = models.DateTimeField(default=timezone.now)
+    img = models.ImageField(upload_to='posts/', blank=True, null=True, default="add img")
 
     @property
     def is_authenticated(self):
         """examination if user is authentificated"""
         return True
+
+    def in_img(self):
+        if self.img:
+            return u'<img src="%s" width="350" height="350" />' % self.img.url
+        else:
+            return '(Sin imagen)'
 
     def __str__(self):
         return self.title

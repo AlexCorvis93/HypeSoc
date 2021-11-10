@@ -3,12 +3,12 @@
 {% load static %}
 
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <title>Profile</title>
-       <link rel="stylesheet" href="{% static 'css/profile.css'%}" >
-  </head><body>
+  <link rel="stylesheet" href="{% static 'css/main.css'%}" >
+ <script src="{% static 'js/script.js' %}"></script>
+
+ </head>
+<body>
+
 <h1>Profiles</h1>
 {% block content %}
    {% if user.is_authenticated %}
@@ -62,14 +62,16 @@
         <h2 class="font-weight-normal">Biography</h2>
         <p>{{profile.bio}}</p>
         <ul class="col-lg-3 col-md-5 pl-xl-1"><h2>My Posts</h2>
+
             {% for pos in post %}
+            <img src="{{MEDIA_URL}}{{ pos.img.url }}" width='250' height='250'>
             <h3>{{ pos.title}}</h3>
              <p>{{pos.text}}</p>
              <img src="{{MEDIA_URL}}{{ profile.ava.url }}" width='30' height='30'>
              {{pos.public_time}}
              {{pos.category}}
              {{pos.author}}</p>
-            {% endfor %}
+              {% endfor %}
             {% include "user/paginator.html" with page=page_obj %}
         </ul>
       </div>

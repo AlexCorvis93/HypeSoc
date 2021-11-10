@@ -8,8 +8,9 @@
 <body>
 {% if post %}
 <h2>{{post.title}}</h2>
-<P>{{post.text}}
-   {{post.get_category_display}}
+<img src="{{MEDIA_URL}}{{ post.img.url }}" width='370' height='450'>
+<h4>{{post.text}}</h4>
+<p>{{post.get_category_display}}</p>
    {{post.author}}
    {{post.public_time}}
 </P>
@@ -39,6 +40,10 @@
         {{ form_comments.as_p }}
         <p><input type="submit" value="Add comment"></p>
     </form>
+{% endif %}
+{% if post.author == user%}
+<h4><a href="{% url 'delete' pk=post.pk %}">Delete</a></h4>
+<h4><a href="{% url 'new_posT' pk=post.pk %}">UPDATE</a></h4>
 {% endif %}
 </body>
 {% endblock %}

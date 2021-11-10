@@ -10,11 +10,12 @@ from django.views.generic import ListView
 from rest_framework import viewsets, status
 from .serializers import PostSerializer
 from django.core.paginator import Paginator
+from django.core.files.storage import FileSystemStorage
 
 def post_detail(request, pk):
     """COMMENTS"""
     post = get_object_or_404(Post, pk=pk)
-    comments = post.comments.filter(active=True)
+    comments = post.comments.filter(active=True).order_by('-created')[:3]
     if request.method == 'POST':
         form = CreateCommentForm(request.POST)
         if form.is_valid():
@@ -25,6 +26,14 @@ def post_detail(request, pk):
         form = CreateCommentForm()
     return render(request, 'user/post_detail.html', {'post': post, 'comments': comments, 'form_comments': form})
 
+
+def delete(request, pk):
+    try:
+        post = get_object_or_404(Post, pk=pk)
+        post.delete()
+        return redirect("/")
+    except Post.DoesNotExist:
+        return Response("<h2>Person not found</h2>")
 
 
 class ShowPosts(ListView):
@@ -54,10 +63,11 @@ class ShowProfile(APIView):
 
 
 class New_post(APIView):
-    """FORM CREATE API"""
+    """FORM POST CREATE API"""
     serializer_class = PostSerializer
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "user/create_post_api.html"
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
           serializer = PostSerializer()
@@ -66,42 +76,37 @@ class New_post(APIView):
     def post(self, request):
         serializer = PostSerializer(data=request.data)
         if not serializer.is_valid():
-            serializer.save()
             return Response({"serializer": serializer})
         post = serializer.save()
         return redirect('new_posT', pk=post.pk)
 
 
-
 class NewPostDetail(APIView):
-    """GET UPDATE DELETE post REST_Framework"""
+    """GET UPDATE post REST_Framework"""
+    permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
-    # renderer_classes = [TemplateHTMLRenderer]
-    # template_name = "user/new_api_post.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "user/new_api_post.html"
 
     def get_object(self, pk):
         try:
-            return Post.objects.get(pk=pk)
+            return get_object_or_404(Post, pk=pk)
         except Post.DoesNotExist:
             raise Http404
 
     def get(self, request, pk):
-        post = self.get_object(pk)
+        post = get_object_or_404(Post, pk=pk)
         serializer = PostSerializer(post)
-        return Response(serializer.data)
+        return Response({'serializer': serializer, 'post': post})
 
-    def put(self, request, pk):
-        post = self.get_object(pk)
+    def post(self, request, pk, format=None):
+        post = get_object_or_404(Post, pk=pk)
         serializer = PostSerializer(post, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            up_post = serializer
-            return Response(up_post)
-
-    def delete(self, request, pk):
-        snippet = self.get_object(pk)
-        snippet.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({'serializer': serializer, "post": post})
+        serializer.save()
+        return redirect('post_detail')
 
 
 
@@ -127,36 +132,6 @@ class NewPostDetail(APIView):
 
 
 
-
-
-
- # def post_detail(request, pk):
- #     """COMMENTS"""
- #     post = get_object_or_404(Post, pk=pk)
- #     comments = post.comments.filter(active=True)
- #     if request.method == 'POST':
- #         form = CreateCommentForm(request.POST)
- #         if form.is_valid():
- #             new_comment = form.save(commit=False)
- #             new_comment.post = post
- #             new_comment.save()
- #     else:
- #         form = CreateCommentForm()
- #     return render(request, 'user/post_detail.html', {'post': post, 'comments': comments, 'form_comments': form})
- #
- #
- #
- # def post_new(request):
- #     """CREATE POST"""
- #     if request.method == "POST":
- #         form = CreatePostForm(request.POST)
- #         if form.is_valid():
- #             post = form.save(commit=False)
- #             post.save()
- #             return redirect('post_detail', pk=post.pk)
- #     else:
- #         form = CreatePostForm()
- #     return render(request, 'user/create_post.html', {'form': form})
 
 
 

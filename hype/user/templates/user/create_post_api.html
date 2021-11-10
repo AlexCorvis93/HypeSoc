@@ -1,15 +1,19 @@
+{% extends "user/posts.html" %}
 {% load rest_framework %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>TEst</title>
 </head>
 <body>
-<form method="post" novalidate>
+{% block content %}
+<h3>New post</h3>
+<form method="post" novalidate enctype="multipart/form-data">
     {% csrf_token %}
     <H4>{% render_form serializer %}</H4>
     <button type="submit" class="btn btn-default">SAVE</button>
 </form>
-
+{% endblock %}
 </body>
 </html>

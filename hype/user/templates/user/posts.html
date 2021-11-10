@@ -36,7 +36,7 @@
                 <li>
                     <a href="#">Followers</a>
                 </li>
-                <li><a href="/accoutns/login/">Log out</a></li>
+                <li><a href="/accounts/logout/">Log out</a></li>
 
             </ul>
 
@@ -59,6 +59,7 @@
              {% for post in object_list %}
               {% for profile in prof %}
             {% if profile.login == post.author %}
+             <img src="{{MEDIA_URL}}{{ post.img.url }}" width='320' height='350'></p>
             <h2>{{post.title}}</h2>
             <p>{{post.text}}</p>
             <a>{{post.author}}
@@ -66,11 +67,10 @@
              {{post.public_time}}
             </a>
             <p>{{post.get_category_display}}
-
-            <h4><a href="{% url 'post_detail' pk=post.pk %}">Comments</a></h4>
+            <h4><a href="{% url 'post_detail' pk=post.pk %}">Detail</a></h4>
             <div class="line"></div>
-             {% endif %}
-             {% endfor %}
+              {% endif %}
+              {% endfor %}
             {% endfor %}
             {% include "user/paginator.html" with page=page_obj %}
     </div>
