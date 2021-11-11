@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'user'
+    'user',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +137,7 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = '/profile' #позже заменить на страницу аккаунта
+LOGIN_REDIRECT_URL = '/personal_page' #позже заменить на страницу аккаунта
 LOGOUT_REDIRECT_URL = '/'
 
 #default settings for rest_framework"

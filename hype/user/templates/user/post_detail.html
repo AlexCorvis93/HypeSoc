@@ -1,4 +1,5 @@
 {% extends "user/posts.html" %}
+{% load thumbnail %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,14 +9,16 @@
 <body>
 {% if post %}
 <h2>{{post.title}}</h2>
-<img src="{{MEDIA_URL}}{{ post.img.url }}" width='370' height='450'>
+{% thumbnail post.img "500x500" crop="center" as img %}
+<img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+{% endthumbnail %}
 <h4>{{post.text}}</h4>
 <p>{{post.get_category_display}}</p>
    {{post.author}}
    {{post.public_time}}
 </P>
 {% endif %}
-{% with comments.count as total_comments %}
+{% with total_comment.count as total_comments %}
     <h3>
         {{ total_comments }} comment{{ total_comments|pluralize }}
     </h3>
@@ -26,7 +29,7 @@
             Comment {{ forloop.counter }} by {{ comment.name }}
             {{ comment.created }}
         </p>
-        {{ comment.body|linebreaks }}
+        <h5>{{ comment.body|linebreaks }}</h5>
     </div>
 {% empty %}
     <p>There are no comments yet.</p>

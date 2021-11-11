@@ -37,7 +37,7 @@ a:focus {
 
 .line {
     width: 100%;
-    height: 1px;
+    height: 2px;
     border-bottom: 1px dashed #ddd;
     margin: 40px 0;
 }
@@ -143,9 +143,9 @@ a.article:hover {
 
 #content {
     width: 100%;
-    padding: 20px;
+    padding: 40px;
     min-height: 100vh;
-    transition: all 0.3s;
+    transition: all 0.5s;
 }
 
 /* ---------------------------------------------------

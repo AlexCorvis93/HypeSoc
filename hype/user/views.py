@@ -2,11 +2,11 @@ from django.http import HttpResponse, Http404
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, Post
+from .models import Profile, Post, Follower
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CreateCommentForm
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, TemplateView
 from rest_framework import viewsets, status
 from .serializers import PostSerializer
 from django.core.paginator import Paginator
@@ -15,6 +15,7 @@ from django.core.files.storage import FileSystemStorage
 def post_detail(request, pk):
     """COMMENTS"""
     post = get_object_or_404(Post, pk=pk)
+    total_comment = post.comments.all()
     comments = post.comments.filter(active=True).order_by('-created')[:3]
     if request.method == 'POST':
         form = CreateCommentForm(request.POST)
@@ -24,16 +25,37 @@ def post_detail(request, pk):
             new_comment.save()
     else:
         form = CreateCommentForm()
-    return render(request, 'user/post_detail.html', {'post': post, 'comments': comments, 'form_comments': form})
+    return render(request, 'user/post_detail.html', {'post': post, 'comments': comments,
+                                                     'form_comments': form, "total_comment": total_comment})
 
 
 def delete(request, pk):
+    """DELETE POST"""
     try:
         post = get_object_or_404(Post, pk=pk)
         post.delete()
         return redirect("/")
     except Post.DoesNotExist:
-        return Response("<h2>Person not found</h2>")
+        return Response("<h2>Post not found</h2>")
+
+
+
+class ProfilePage(DetailView):
+    """SHOW DETAIL USERS PAGE"""
+    model = Profile
+
+    def get_context_data(self, *, object_list=None, **kwargs, ):
+        context = super(ProfilePage, self).get_context_data(**kwargs)
+        context['post'] = Post.objects.all().filter(author=self.object.login)
+        return context
+
+
+
+def personalPage(request):
+    """PERSONAL PAGE"""
+    profile = Profile.objects.all().filter(login=request.user)
+    post = Post.objects.all().filter(author=request.user.id)
+    return render(request, "user/profile_page.html", {"object": profile, "post": post})
 
 
 class ShowPosts(ListView):
@@ -47,19 +69,6 @@ class ShowPosts(ListView):
         context = super(ShowPosts, self).get_context_data(**kwargs)
         context['prof'] = Profile.objects.all()
         return context
-
-
-class ShowProfile(APIView):
-        """SHOW PERSONAL PAGE"""
-        permission_classes = [IsAuthenticated]
-        queryset = Profile.objects.all()
-        renderer_classes = [TemplateHTMLRenderer]
-        template_name = 'user/profile.html'
-
-        def get(self, request):
-            queryset = Profile.objects.all().filter(login=request.user)
-            cont = Post.objects.all().filter(author=request.user)
-            return Response({'profiles': queryset, 'post': cont})
 
 
 class New_post(APIView):
@@ -107,10 +116,6 @@ class NewPostDetail(APIView):
             return Response({'serializer': serializer, "post": post})
         serializer.save()
         return redirect('post_detail')
-
-
-
-
 
 
 

@@ -65,8 +65,12 @@ class Post(models.Model):
 
 class Follower(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
     subscriber = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribers')
+
+
+    class Meta:
+        unique_together = ('user', 'subscriber')
 
     def __str__(self):
         return f'{self.subscriber} is followed by {self.user}'

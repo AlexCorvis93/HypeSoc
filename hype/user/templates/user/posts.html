@@ -1,5 +1,6 @@
 {% load rest_framework %}
 {% load static %}
+{% load thumbnail %}
 <html lang="en">
  <html lang="en"><head>
     <title>Post</title>
@@ -23,7 +24,7 @@
                     <ul class="collapse list-unstyled" >
 
                         <li>
-                            <a href="/profile/">Profile</a>
+                            <a href="/personal_page/">Profile</a>
                         </li>
                         <li>
                             <a href="/">News</a>
@@ -35,6 +36,9 @@
                 </li>
                 <li>
                     <a href="#">Followers</a>
+                </li>
+                <li>
+                    <a href="#">Following</a>
                 </li>
                 <li><a href="/accounts/logout/">Log out</a></li>
 
@@ -59,11 +63,13 @@
              {% for post in object_list %}
               {% for profile in prof %}
             {% if profile.login == post.author %}
-             <img src="{{MEDIA_URL}}{{ post.img.url }}" width='320' height='350'></p>
+             {% thumbnail post.img "500x500" crop="center" as img %}
+            <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+             {% endthumbnail %}
             <h2>{{post.title}}</h2>
             <p>{{post.text}}</p>
             <a>{{post.author}}
-                <img src="{{MEDIA_URL}}{{ profile.ava.url }}" width='30' height='30'></p>
+                <a href="{% url 'profile_page' pk=profile.pk %}"> <img src="{{MEDIA_URL}}{{ profile.ava.url }}" width='30' height='30'></a></p>
              {{post.public_time}}
             </a>
             <p>{{post.get_category_display}}
