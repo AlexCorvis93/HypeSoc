@@ -2,15 +2,14 @@ from django.http import HttpResponse, Http404
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, Post, Follower
+from .models import Profile, Post
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CreateCommentForm
-from django.views.generic import ListView, DetailView, TemplateView
-from rest_framework import viewsets, status
+from django.views.generic import ListView, DetailView
 from .serializers import PostSerializer
 from django.core.paginator import Paginator
-from django.core.files.storage import FileSystemStorage
+from itertools import chain
 
 def post_detail(request, pk):
     """COMMENTS"""
@@ -21,6 +20,7 @@ def post_detail(request, pk):
         form = CreateCommentForm(request.POST)
         if form.is_valid():
             new_comment = form.save(commit=False)
+            new_comment.name = request.user
             new_comment.post = post
             new_comment.save()
     else:
@@ -39,6 +39,20 @@ def delete(request, pk):
         return Response("<h2>Post not found</h2>")
 
 
+def following(request):
+    """FOLLOWING FUNCTION"""
+    if request.method == 'POST':
+        my_profile = Profile.objects.get(login=request.user)
+        pk = request.POST.get('profile_pk')
+        obj = Profile.objects.get(pk=pk)
+
+        if obj.login in my_profile.followers.all():
+            my_profile.followers.remove(obj.login)
+        else:
+            my_profile.followers.add(obj.login)
+        return redirect(request.META.get("HTTP_REFERER"))
+    return redirect('main')
+
 
 class ProfilePage(DetailView):
     """SHOW DETAIL USERS PAGE"""
@@ -46,29 +60,42 @@ class ProfilePage(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs, ):
         context = super(ProfilePage, self).get_context_data(**kwargs)
-        context['post'] = Post.objects.all().filter(author=self.object.login)
+        view_profile = self.get_object()
+        context['post'] = Post.objects.all().filter(author=view_profile)
+        my_profile = Profile.objects.get(login=self.request.user)
+        if view_profile.login in my_profile.followers.all():
+            follow = True
+        else:
+            follow = False
+        context['follow'] = follow
         return context
-
 
 
 def personalPage(request):
     """PERSONAL PAGE"""
-    profile = Profile.objects.all().filter(login=request.user)
-    post = Post.objects.all().filter(author=request.user.id)
+    profile = Profile.objects.get(login=request.user)
+    post = Post.objects.all().filter(author=profile).order_by('-public_time')[:3]
     return render(request, "user/profile_page.html", {"object": profile, "post": post})
 
 
-class ShowPosts(ListView):
-    """SHOW POSTS in main page"""
-    model = Post
-    paginate_by = 3
-    context_object_name = 'post'
-    template_name = 'user/posts.html'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ShowPosts, self).get_context_data(**kwargs)
-        context['prof'] = Profile.objects.all()
-        return context
+def post_news(request):
+    """NEWS LIST for FOLLOWING USER"""
+    profile = Profile.objects.get(login=request.user)
+    user_list = [login for login in profile.followers.all()]
+    pr_list = Profile.objects.all()
+    posts = []
+    for user in user_list:
+        profile_get = Profile.objects.get(login=user)
+        p = Post.objects.all().filter(author=profile_get)
+        posts.append(p)
+    my_post = Post.objects.all().filter(author=profile)
+    posts.append(my_post)
+    if len(posts) > 0:
+        qs = sorted(chain(*posts), reverse=True, key=lambda obj: obj.title)
+    paginator = Paginator(qs, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'user/news.html', {'posts': page_obj, 'prof': profile, 'pr_list': pr_list})
 
 
 class New_post(APIView):
@@ -86,7 +113,7 @@ class New_post(APIView):
         serializer = PostSerializer(data=request.data)
         if not serializer.is_valid():
             return Response({"serializer": serializer})
-        post = serializer.save()
+        post = serializer.save(author=self.request.user)
         return redirect('new_posT', pk=post.pk)
 
 
@@ -172,3 +199,29 @@ class NewPostDetail(APIView):
 
 
 
+
+# class ShowPosts(ListView):
+#     """SHOW POSTS in main page"""
+#     model = Post
+#     paginate_by = 5
+#
+#     template_name = 'user/news.html'
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super(ShowPosts, self).get_context_data(**kwargs)
+#         profile = Profile.objects.get(login=self.request.user)
+#         context['prof'] = profile
+#         profile_list = Profile.objects.all()
+#         context["pr_list"] = profile_list
+#         user_list = [login for login in profile.followers.all()]
+#         posts = []
+#         for user in user_list:
+#             profile_get = Profile.objects.get(login=user)
+#             p = Post.objects.all().filter(author=profile_get)
+#             posts.append(p)
+#         my_post = Post.objects.all().filter(author=profile)
+#         posts.append(my_post)
+#         if len(posts) > 0:
+#             qs = sorted(chain(*posts), reverse=True, key=lambda obj: obj.id)
+#         context['posts'] = qs
+#         return context

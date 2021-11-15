@@ -1,5 +1,6 @@
-{% extends "user/posts.html" %}
+{% extends "user/news.html" %}
 {% load thumbnail %}
+{% load crispy_forms_tags %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,7 +30,7 @@
             Comment {{ forloop.counter }} by {{ comment.name }}
             {{ comment.created }}
         </p>
-        <h5>{{ comment.body|linebreaks }}</h5>
+        <h5>{{ comment.text|linebreaks }}</h5>
     </div>
 {% empty %}
     <p>There are no comments yet.</p>
@@ -40,7 +41,8 @@
     <h2>Add a new comment</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form_comments.as_p }}
+
+        {{ form_comments.text|as_crispy_field  }}
         <p><input type="submit" value="Add comment"></p>
     </form>
 {% endif %}

@@ -6,7 +6,7 @@ class CreateCommentForm(forms.ModelForm):
     """COMMENT"""
     class Meta:
         model =Comment
-        fields = ('name', 'body')
+        fields = ('name', 'text')
 
 
 

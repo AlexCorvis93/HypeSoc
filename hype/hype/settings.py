@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'user',
-    'sorl.thumbnail',
+    'sorl.thumbnail',# for authosize fhoto
+     'crispy_forms', # style form
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,4 @@ REST_FRAMEWORK = {
 }
 
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

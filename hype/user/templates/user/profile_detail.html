@@ -1,16 +1,28 @@
-{% extends "user/posts.html" %}
+{% extends "user/news.html" %}
 {% load rest_framework %}
 {% load static %}
 {% load thumbnail %}
 <html lang="en">
   <link rel="stylesheet" href="{% static 'css/main.css'%}" >
  <script src="{% static 'js/script.js' %}"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!--Custom css ADD HERE-->
+
+    <!-- semantic UI -->
+    <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
 
  </head>
 <body>
 
 <h1>Profile Page</h1>
 {% block content %}
+
    {% if user.is_authenticated %}
     <div class="row">
       <div class="col-lg-5 col-md-6">
@@ -19,6 +31,29 @@
           <img src="{{MEDIA_URL}}{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
              {% endthumbnail %}
         </div>
+          <hr>
+          {% if follow %}
+          <form action="{% url 'following' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="profile_pk" value={{object.pk}}>
+              <button type="submit" class="ui negative button">UNFOLLOW</button>
+          </form>
+          {% else %}
+          <form action="{% url 'following' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="profile_pk" value={{object.pk}}>
+              <button type="submit" class="ui positive button">FOLLOW</button>
+          </form>
+          {% endif %}
+              <!-- FOLLOWING_LIST  -->
+         <div class="following" style="position: absolute; top: 5%; left: 50%">
+              <p>
+                  {{object.name}} followed by :
+          </p>
+          {% for p in object.followers.all%}
+          <a><a href="{% url 'profile_page' pk=p.pk %}">{{p}},</a></a>
+             {% endfor %}
+          </div>
         <div class="mb-2 d-flex">
           <h1 class="font-weight-normal">{{object.name}}</h1>
           <div class="social d-flex ml-auto">
@@ -55,6 +90,7 @@
               <span class="w-25 text-black font-weight-normal">Email: </span>
               <label class="media-body">{{object.email}}</label>
             </li>
+
           </ul>
         </div>
       </div>
