@@ -14,6 +14,7 @@ from itertools import chain
 def post_detail(request, pk):
     """COMMENTS"""
     post = get_object_or_404(Post, pk=pk)
+    author = Profile.objects.get(login=request.user)
     total_comment = post.comments.all()
     comments = post.comments.filter(active=True).order_by('-created')[:3]
     if request.method == 'POST':
@@ -26,7 +27,9 @@ def post_detail(request, pk):
     else:
         form = CreateCommentForm()
     return render(request, 'user/post_detail.html', {'post': post, 'comments': comments,
-                                                     'form_comments': form, "total_comment": total_comment})
+                                                     'form_comments': form, "total_comment": total_comment,
+                                                     "author": author
+                                                     })
 
 
 def delete(request, pk):
@@ -98,6 +101,9 @@ def post_news(request):
     return render(request, 'user/news.html', {'posts': page_obj, 'prof': profile, 'pr_list': pr_list})
 
 
+
+
+
 class New_post(APIView):
     """FORM POST CREATE API"""
     serializer_class = PostSerializer
@@ -105,15 +111,21 @@ class New_post(APIView):
     template_name = "user/create_post_api.html"
     permission_classes = [IsAuthenticated]
 
+
+    def perform_create(self, serializer):
+        profile = Profile.objects.get(login=self.request.user)
+        serializer.save(author=profile.name)
+
     def get(self, request):
           serializer = PostSerializer()
           return Response({'serializer': serializer})
 
     def post(self, request):
+        profile = Profile.objects.get(login=self.request.user)
         serializer = PostSerializer(data=request.data)
         if not serializer.is_valid():
             return Response({"serializer": serializer})
-        post = serializer.save(author=self.request.user)
+        post = serializer.save(author=profile)
         return redirect('new_posT', pk=post.pk)
 
 

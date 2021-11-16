@@ -1,7 +1,7 @@
 {% extends "user/news.html" %}
 {% load thumbnail %}
 {% load crispy_forms_tags %}
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Post</title>
@@ -18,6 +18,10 @@
    {{post.author}}
    {{post.public_time}}
 </P>
+{% if post.author == author %}
+<h5><a href="{% url 'delete' pk=post.pk %}">DELETE </a></h5>
+<h5><a href="{% url 'new_posT' pk=post.pk %}">UPDATE</a></h5>
+{% endif %}
 {% endif %}
 {% with total_comment.count as total_comments %}
     <h3>
@@ -45,10 +49,6 @@
         {{ form_comments.text|as_crispy_field  }}
         <p><input type="submit" value="Add comment"></p>
     </form>
-{% endif %}
-{% if post.author == user%}
-<h4><a href="{% url 'delete' pk=post.pk %}">Delete</a></h4>
-<h4><a href="{% url 'new_posT' pk=post.pk %}">UPDATE</a></h4>
 {% endif %}
 </body>
 {% endblock %}
