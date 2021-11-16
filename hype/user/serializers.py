@@ -17,8 +17,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=400, style={'template': 'user/form_post.html'})
-    text = serializers.CharField(max_length=1000, style={'base_template': 'textarea.html', 'rows': 7})
+    title = serializers.CharField(max_length=400)
+    text = serializers.CharField(max_length=1000, style={'base_template': 'textarea.html', 'rows': 4})
     category = serializers.ChoiceField(choices=Category_choices)
     img = serializers.ImageField(max_length=None, allow_empty_file=False, use_url=True)
 

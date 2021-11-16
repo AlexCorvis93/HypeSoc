@@ -67,6 +67,10 @@
             <p>{{post.public_time}}</p>
             <p>{{post.get_category_display}}</p>
              <h4><a href="{% url 'post_detail' pk=post.pk %}">Detail</a></h4>
+            {% if post.author == prof %}
+            <h6><a href="{% url 'new_posT' pk=post.pk %}">UPDATE</a></h6>
+            <h6><a href="{% url 'delete' pk=post.pk %}">DELETE</a></h6>
+            {% endif %}
             <div class="line"></div>
             {% endfor %}
             <p>{% include 'user/paginator.html' %}</p>
