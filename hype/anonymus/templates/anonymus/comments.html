@@ -19,50 +19,37 @@
    {{post.author}}
    {{post.public_time}}
 </P>
-{% if post.author == author %}
-<h5><a href="{% url 'delete' pk=post.pk %}">DELETE </a></h5>
-<h5><a href="{% url 'new_posT' pk=post.pk %}">UPDATE</a></h5>
-{% endif %}
 {% endif %}
 {% with total_comment.count as total_comments %}
     <h3>
         {{ total_comments }} comment{{ total_comments|pluralize }}
     </h3>
 {% endwith %}
-{% with anonym.count as total_comments %}
-    <h5>
-        {{ total_comments }} Anonymus comment{{ total_comments|pluralize }}
-    </h5>
-{% endwith %}
-{% for comment in comments %}
- {% for anonym in anonym %}
+{% for comment in comment %}
     <div class="comment">
         <p class="info">
             Comment {{ forloop.counter }} by {{ comment.name }}
             {{ comment.created }}
         </p>
         <h5>{{ comment.text|linebreaks }}</h5>
-        <p class="info">
-            Comment by {{ anonym.name }}
-            {{ comment.created }}
-        </p>
-        <h5>{{ anonym.text|linebreaks }}</h5>
     </div>
 {% empty %}
     <p>There are no comments yet.</p>
-{% endfor %}
 {% endfor %}
 {% if new_comment %}
     <h2>Your comment has been added.</h2>
 {% else %}
     <h2>Add a new comment</h2>
-    <form method="post">
+    <form  method="post">
         {% csrf_token %}
 
-        {{ form_comments.text|as_crispy_field  }}
+        {{ form_comment.text|as_crispy_field  }}
         <p><input type="submit" value="Add comment"></p>
     </form>
 {% endif %}
-{% endblock %}
+<h5><a href="{% url 'a_news' %}">BACK</a></h5>
+</span>
+</div>
 </body>
 </html>
+{% endblock %}

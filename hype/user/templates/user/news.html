@@ -24,13 +24,19 @@
                     <ul class="collapse list-unstyled" >
 
                         <li>
-                            <a href="/personal_page/">Profile</a>
+                            <a href="{% url 'personal_page' %}">Profile</a>
                         </li>
                         <li>
-                            <a href="/">News</a>
+                            <a href="{% url 'news' %}">News</a>
                         </li>
                         <li>
                             <a href="{% url 'create_post' %}">Create new post</a>
+                        </li>
+                        <li>
+                            <a href="/admin/">Admin</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'people' %}">People</a>
                         </li>
                     </ul>
                 </li>
@@ -39,7 +45,6 @@
             </ul>
   <!-- if not authentificated -->
             {% else %}
-             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{ user.get_username }}</a>
                     <ul class="collapse list-unstyled" >
 
                 <li>
@@ -50,7 +55,6 @@
         </nav>
 
         <!-- Page Posts  -->
-
         <div id="content">
          {% block content %}
             {% for post in posts %}
@@ -74,9 +78,8 @@
             <div class="line"></div>
             {% endfor %}
             <p>{% include 'user/paginator.html' %}</p>
+                {% endblock %}
+
 </div>
 </div>
-
-          {% endblock %}
-
 </body></html>

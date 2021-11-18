@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends "user/news.html" %}
+{% load rest_framework %}
+{% load static %}
+{% load thumbnail %}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="content">
+         {% block content %}
+            {% for person in person %}
+             {% thumbnail person.ava "100x100" crop="center" as img %}
+            <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+             {% endthumbnail %}
+            <h2>{{person.login}}</h2>
+            <h5>{{person.name}}</h5>
+             <h5> {{person.last_name}}</h5>
+             <h4><a href="{% url 'profile_page' pk=person.pk %}">See profile</a></h4>
+            <div class="line"></div>
+            {% endfor %}
+            <p>{% include 'user/paginator.html' %}</p>
+                {% endblock %}
+</div>
+</body>
+</html>

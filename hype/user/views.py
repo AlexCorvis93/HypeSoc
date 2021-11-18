@@ -3,6 +3,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Profile, Post
+from anonymus.models import AnonymusComment
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CreateCommentForm
@@ -11,11 +12,13 @@ from .serializers import PostSerializer
 from django.core.paginator import Paginator
 from itertools import chain
 
+
 def post_detail(request, pk):
     """COMMENTS"""
     post = get_object_or_404(Post, pk=pk)
     author = Profile.objects.get(login=request.user)
     total_comment = post.comments.all()
+    anonym_comment = AnonymusComment.objects.all().order_by('-created')[:3]
     comments = post.comments.filter(active=True).order_by('-created')[:3]
     if request.method == 'POST':
         form = CreateCommentForm(request.POST)
@@ -26,10 +29,12 @@ def post_detail(request, pk):
             new_comment.save()
     else:
         form = CreateCommentForm()
+
     return render(request, 'user/post_detail.html', {'post': post, 'comments': comments,
                                                      'form_comments': form, "total_comment": total_comment,
-                                                     "author": author
+                                                     "author": author, 'anonym': anonym_comment
                                                      })
+
 
 
 def delete(request, pk):
@@ -157,6 +162,16 @@ class NewPostDetail(APIView):
         return redirect('post_detail')
 
 
+class PeopleList(ListView):
+    """USERS LIST for search people"""
+    model = Profile
+    paginate_by = 10
+    template_name = 'user/people_list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(PeopleList, self).get_context_data(**kwargs)
+        context["person"] = Profile.objects.all().exclude(login=self.request.user)
+        return context
 
 
 
@@ -207,33 +222,3 @@ class NewPostDetail(APIView):
 
 
 
-
-
-
-
-
-# class ShowPosts(ListView):
-#     """SHOW POSTS in main page"""
-#     model = Post
-#     paginate_by = 5
-#
-#     template_name = 'user/news.html'
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super(ShowPosts, self).get_context_data(**kwargs)
-#         profile = Profile.objects.get(login=self.request.user)
-#         context['prof'] = profile
-#         profile_list = Profile.objects.all()
-#         context["pr_list"] = profile_list
-#         user_list = [login for login in profile.followers.all()]
-#         posts = []
-#         for user in user_list:
-#             profile_get = Profile.objects.get(login=user)
-#             p = Post.objects.all().filter(author=profile_get)
-#             posts.append(p)
-#         my_post = Post.objects.all().filter(author=profile)
-#         posts.append(my_post)
-#         if len(posts) > 0:
-#             qs = sorted(chain(*posts), reverse=True, key=lambda obj: obj.id)
-#         context['posts'] = qs
-#         return context

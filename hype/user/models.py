@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from PIL import Image
-
 from django.contrib.auth.models import User
 
 
@@ -39,15 +38,9 @@ class Post(models.Model):
     title = models.CharField(max_length=140)
     text = models.TextField(verbose_name='text')
     category = models.PositiveSmallIntegerField('category', choices=Category_choices)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None)
     public_time = models.DateTimeField(default=timezone.now)
     img = models.ImageField(upload_to='posts/', blank=True, null=True, default="add img")
-
-    @property
-    def is_authenticated(self):
-        """examination if user is authentificated"""
-        return True
-
 
     def __str__(self):
         return self.title
@@ -57,7 +50,7 @@ class Post(models.Model):
 class Comment(models.Model):
     """COMMENTS"""
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-    name = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    name = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     text = models.TextField(max_length='200')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -68,3 +61,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return 'Comment by {} on {}'.format(self.name, self.post)
+
+

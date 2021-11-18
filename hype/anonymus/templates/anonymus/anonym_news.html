@@ -1,0 +1,43 @@
+{% extends "user/news.html" %}
+{% load rest_framework %}
+{% load static %}
+{% load thumbnail %}
+<html lang="en">
+<html lang="en"><head>
+    <title>Post</title>
+ <link rel="stylesheet" href="{% static 'css/main.css'%}" >
+ <script src="{% static 'js/script.js' %}"></script>
+
+ </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News</title>
+</head>
+<body>
+<div id="content">
+         {% block content %}
+            {% for post in post %}
+             {% thumbnail post.img "500x500" crop="center" as img %}
+            <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+             {% endthumbnail %}
+            <h2>{{post.title}}</h2>
+            <p>{{post.text}}</p>
+             <h4> {{post.author}}</h4>
+            <p>{{post.public_time}}</p>
+            <p>{{post.get_category_display}}</p>
+             <h4><a href="{% url 'post' pk=post.pk %}">Detail</a></h4>
+            <div class="line"></div>
+            {% endfor %}
+            <div class="pagination">
+<span class="step-links">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Previos</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">NEXT</a>
+    {% endif %}
+                {% endblock %}
+</div>
+</body>
+</html>
