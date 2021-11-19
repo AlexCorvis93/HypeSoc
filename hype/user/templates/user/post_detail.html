@@ -29,28 +29,16 @@
         {{ total_comments }} comment{{ total_comments|pluralize }}
     </h3>
 {% endwith %}
-{% with anonym.count as total_comments %}
-    <h5>
-        {{ total_comments }} Anonymus comment{{ total_comments|pluralize }}
-    </h5>
-{% endwith %}
 {% for comment in comments %}
- {% for anonym in anonym %}
     <div class="comment">
         <p class="info">
             Comment {{ forloop.counter }} by {{ comment.name }}
             {{ comment.created }}
         </p>
         <h5>{{ comment.text|linebreaks }}</h5>
-        <p class="info">
-            Comment by {{ anonym.name }}
-            {{ comment.created }}
-        </p>
-        <h5>{{ anonym.text|linebreaks }}</h5>
     </div>
 {% empty %}
     <p>There are no comments yet.</p>
-{% endfor %}
 {% endfor %}
 {% if new_comment %}
     <h2>Your comment has been added.</h2>

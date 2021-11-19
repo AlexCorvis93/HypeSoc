@@ -3,7 +3,6 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Profile, Post
-from anonymus.models import AnonymusComment
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CreateCommentForm
@@ -18,7 +17,7 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     author = Profile.objects.get(login=request.user)
     total_comment = post.comments.all()
-    anonym_comment = AnonymusComment.objects.all().order_by('-created')[:3]
+    # anonym_comment = AnonymusComment.objects.all().order_by('-created')[:3]
     comments = post.comments.filter(active=True).order_by('-created')[:3]
     if request.method == 'POST':
         form = CreateCommentForm(request.POST)
@@ -32,7 +31,7 @@ def post_detail(request, pk):
 
     return render(request, 'user/post_detail.html', {'post': post, 'comments': comments,
                                                      'form_comments': form, "total_comment": total_comment,
-                                                     "author": author, 'anonym': anonym_comment
+                                                     "author": author,
                                                      })
 
 

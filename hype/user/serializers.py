@@ -4,16 +4,11 @@ from PIL import Image
 from .models import Profile, Post, Category_choices
 
 
-# Позже переведу все формы через апи
-# Импортировал модели для сериализации-профиль,пост
 class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
         fields = ('login', 'name')
-
-
-
 
 
 class PostSerializer(serializers.ModelSerializer):
