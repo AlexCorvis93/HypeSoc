@@ -96,17 +96,7 @@ a[aria-expanded="true"] {
     background: #383a42;
 }
 
-a[data-toggle="collapse"] {
-    position: relative;
-}
 
-.dropdown-toggle::after {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-}
 
 ul ul a {
     font-size: 1.3em !important;

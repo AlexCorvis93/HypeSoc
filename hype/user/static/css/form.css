@@ -1,0 +1,19 @@
+.title {
+  width:700px;
+  padding:10px;
+  margin:10px 0;
+  border: 1px solid #eee;
+  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+  border-radius:10px;
+
+}
+
+.text {
+  width:700px;
+  padding:20px;
+  margin:15px 0;
+  border: 1px solid #eee;
+  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+  border-radius:10px;
+  width:100%;
+}

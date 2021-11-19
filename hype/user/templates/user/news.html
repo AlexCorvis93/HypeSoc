@@ -20,7 +20,7 @@
 
                 <li class="active">
                     {% if user.is_authenticated %}
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{ user.get_username }}</a>
+                    <a href="{% url 'personal_page' %}"  aria-expanded="false" >{{ user.get_username }}</a>
                     <ul class="collapse list-unstyled" >
 
                         <li>

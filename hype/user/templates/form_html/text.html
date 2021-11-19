@@ -1,10 +1,11 @@
-
-<html lang="en">
+{% load static %}
+{% load rest_framework %}
 <head>
-    <meta charset="UTF-8">
-
+  <link rel="stylesheet" href="{% static 'css/form.css'%}" >
 </head>
 <body>
-
+<form action="create_post" method="post" novalidate enctype="multipart/form-data" >
+    <input  class="text"  placeholder="Text" >
+</form>
 </body>
 </html>

@@ -1,27 +1,27 @@
-<!DOCTYPE html>
+
 {% extends "user/news.html" %}
 {% load rest_framework %}
 {% load static %}
 {% load thumbnail %}
 <head>
     <meta charset="UTF-8">
-     <!-- semantic UI -->
-    <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 </head>
 <body>
-<div id="ui grid" >
-         {% block content %}
-            {% for person in person %}
+{% block content %}
+<div class="table-responsive-sm" style=''>
+  <table class="table">
+    {% for person in person %}
              {% thumbnail person.ava "100x100" crop="center" as img %}
             <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
              {% endthumbnail %}
-            <h2>{{person.login}}</h2>
+               <h2>{{person.login}}</h2>
+
             <h5>{{person.name}}</h5>
              <h5> {{person.last_name}}</h5>
              <h4><a href="{% url 'profile_page' pk=person.pk %}">See profile</a></h4>
-            <div class="line"></div>
-            {% endfor %}
+       {% endfor %}
+  </table>
+</div>
             <div class="pagination">
 <span class="step-links">
     {% if page_obj.has_previous %}

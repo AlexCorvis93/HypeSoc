@@ -1,18 +1,23 @@
 {% extends "user/news.html" %}
 {% load rest_framework %}
-
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>TEst</title>
+
 </head>
 <body>
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/form.css'%}" >
 <h3>New post</h3>
-<form method="post" novalidate enctype="multipart/form-data">
+<form method="post" novalidate enctype="multipart/form-data" >
     {% csrf_token %}
-    <H4>{% render_form serializer template_pack='rest_framework/vertical'%}</H4>
-    <button type="submit" class="btn btn-default">SAVE</button>
+    <div class="title">
+           {% render_form serializer %}
+    <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">SAVE</button>
+    </div>
 </form>
 {% endblock %}
 </body>
