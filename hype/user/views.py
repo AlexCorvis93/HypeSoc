@@ -68,6 +68,7 @@ class ProfilePage(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs, ):
         context = super(ProfilePage, self).get_context_data(**kwargs)
         view_profile = self.get_object()
+        context['person'] = Profile.objects.all()
         context['post'] = Post.objects.all().filter(author=view_profile)
         my_profile = Profile.objects.get(login=self.request.user)
         if view_profile.login in my_profile.followers.all():
@@ -81,8 +82,9 @@ class ProfilePage(DetailView):
 def personalPage(request):
     """PERSONAL PAGE"""
     profile = Profile.objects.get(login=request.user)
+    person = Profile.objects.all()
     post = Post.objects.all().filter(author=profile).order_by('-public_time')[:3]
-    return render(request, "user/profile_page.html", {"object": profile, "post": post})
+    return render(request, "user/profile_page.html", {"object": profile, "post": post, "person": person})
 
 
 def post_news(request):

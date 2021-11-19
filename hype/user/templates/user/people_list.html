@@ -5,10 +5,12 @@
 {% load thumbnail %}
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+     <!-- semantic UI -->
+    <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 </head>
 <body>
-<div id="content">
+<div id="ui grid" >
          {% block content %}
             {% for person in person %}
              {% thumbnail person.ava "100x100" crop="center" as img %}
@@ -20,7 +22,14 @@
              <h4><a href="{% url 'profile_page' pk=person.pk %}">See profile</a></h4>
             <div class="line"></div>
             {% endfor %}
-            <p>{% include 'user/paginator.html' %}</p>
+            <div class="pagination">
+<span class="step-links">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Previos</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">NEXT</a>
+    {% endif %}
                 {% endblock %}
 </div>
 </body>

@@ -50,7 +50,13 @@
                   {{object.name}} followed by :
           </p>
           {% for p in object.followers.all%}
-          <a><a href="{% url 'profile_page' pk=p.pk %}">{{p}},</a></a>
+             {% for person in person %}
+              {% if p == person.login %}
+             {% thumbnail person.ava "30x30" crop="center" as img %}
+             <a href="{% url 'profile_page' pk=p.pk %}"><img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" ></a>
+             {% endthumbnail %}
+             {% endif%}
+             {% endfor %}
              {% endfor %}
           </div>
         <div class="mb-2 d-flex">
@@ -110,8 +116,6 @@
              {{pos.author}}</p>
              <h4><a href="{% url 'post_detail' pk=pos.pk %}">Detail</a></h4>
               {% endfor %}
-            {% include "user/paginator.html" with page=page_obj %}
-
         </ul>
       </div>
 
