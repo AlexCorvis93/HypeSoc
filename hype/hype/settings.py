@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'anonymus',
     'user',
+    'likes',
     'sorl.thumbnail',# for authosize fhoto
      'crispy_forms', # style form
 ]

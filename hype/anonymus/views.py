@@ -1,9 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
-from .models import Profile, Post, Comment, User
-from django.shortcuts import get_object_or_404, redirect, render
+from .models import Post, Comment, User
+from django.shortcuts import render
 from .forms import CreateAnonymusCommentForm
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from django.core.paginator import Paginator
 
 

@@ -1,12 +1,11 @@
 {% load rest_framework %}
 {% load static %}
 {% load thumbnail %}
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
  <html lang="en"><head>
     <title>Post</title>
  <link rel="stylesheet" href="{% static 'css/main.css'%}" >
- <script src="{% static 'js/script.js' %}"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
  </head>
 <body>
 <div class="wrapper">
@@ -55,9 +54,12 @@
         </nav>
 
         <!-- Page Posts  -->
+
         <div id="content">
          {% block content %}
+
             {% for post in posts %}
+            <div class="post">
              {% thumbnail post.img "500x500" crop="center" as img %}
             <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
              {% endthumbnail %}
@@ -70,11 +72,14 @@
             {% endif %}
             <p>{{post.public_time}}</p>
             <p>{{post.get_category_display}}</p>
-             <h4><a href="{% url 'post_detail' pk=post.pk %}">Detail</a></h4>
+               <div><a class="like-btn" href="{% url 'like' pk=post.pk %}"
+                       data-like="{{post.likes.all.count}}">{{post.likes.all.count}} Likes </a></div>
+             <h4><a class="detail_btn" href="{% url 'post_detail' pk=post.pk %}">Detail</a></h4>
             {% if post.author == prof %}
-            <a href="{% url 'new_posT' pk=post.pk %}">UPDATE</a>
-            <a href="{% url 'delete' pk=post.pk %}">DELETE</a>
+            <a class="btn-post" href="{% url 'new_posT' pk=post.pk %}">UPDATE</a>
+            <a class="btn-post" href="{% url 'delete' pk=post.pk %}">DELETE</a>
             {% endif %}
+            </div>
             <div class="line"></div>
             {% endfor %}
             <p>{% include 'user/paginator.html' %}</p>
@@ -82,4 +87,38 @@
 
 </div>
 </div>
+{% block script%}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function updateText(btn, addCount, verb){
+    btn.text(addCount + " " + verb)
+}
+$(".like-btn").click(function(e){
+e.preventDefault()
+var this_ = $(this)
+var likeUrl = this_.attr("href")
+var countLikes = parseInt(this_.attr("data-like"))
+$.ajax({
+  url: likeUrl,
+  method: "GET",
+  data: {},
+  success: function(data){
+    console.log(data)
+    var addLike = countLikes ++
+    var newLike;
+     if (data.liked){
+        newLike= countLikes ++
+        updateText(this_, newLike, "Likes" )
+     }else{
+        newLike = countLikes - 1
+        updateText(this_, newLike, "Likes")
+           }
+    }, error: function(error){
+      console.log(error)
+      console.log("error")
+    }
+    })
+  })
+</script>
+{% endblock %}
 </body></html>

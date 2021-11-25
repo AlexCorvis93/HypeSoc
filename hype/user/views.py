@@ -104,7 +104,7 @@ def post_news(request):
     paginator = Paginator(qs, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'user/news.html', {'posts': page_obj, 'prof': profile, 'pr_list': pr_list})
+    return render(request, 'user/news.html', {'posts': page_obj, 'prof': profile, 'profile_list': pr_list})
 
 
 

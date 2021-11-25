@@ -5,12 +5,12 @@
 {% load thumbnail %}
 <head>
     <meta charset="UTF-8">
+     <link rel="stylesheet" href="{% static 'css/main.css'%}" >
 </head>
 <body>
 {% block content %}
-<div class="table-responsive-sm" style=''>
-  <table class="table">
     {% for person in person %}
+         <div class="people">
              {% thumbnail person.ava "100x100" crop="center" as img %}
             <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
              {% endthumbnail %}
@@ -19,9 +19,8 @@
             <h5>{{person.name}}</h5>
              <h5> {{person.last_name}}</h5>
              <h4><a href="{% url 'profile_page' pk=person.pk %}">See profile</a></h4>
+              </div>
        {% endfor %}
-  </table>
-</div>
             <div class="pagination">
 <span class="step-links">
     {% if page_obj.has_previous %}

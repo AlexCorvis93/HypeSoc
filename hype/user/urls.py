@@ -1,5 +1,6 @@
 from django.urls import path, include
 from .views import *
+from likes.views import LikeApi
 
 urlpatterns = [
    path('personal_page/<int:pk>/', ProfilePage.as_view(), name='profile_page'),# another users page
@@ -11,12 +12,7 @@ urlpatterns = [
    path('delete/<int:pk>/', delete, name='delete'),# delete function
    path("followers/", following, name='following'),# following button
    path('', post_news, name='news'),#news by following users
-
-
-
-
-
-
+   path('likes/<int:pk>/', LikeApi.as_view(), name='like'), #LIKES
 
 ]
 

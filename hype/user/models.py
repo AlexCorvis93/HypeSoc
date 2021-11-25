@@ -33,14 +33,14 @@ Category_choices = [
     ]
 
 class Post(models.Model):
-    """custom post"""
-
+    """create and show post"""
     title = models.CharField(max_length=140)
     text = models.TextField(verbose_name='text')
     category = models.PositiveSmallIntegerField('category', choices=Category_choices)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None)
     public_time = models.DateTimeField(default=timezone.now)
     img = models.ImageField(upload_to='posts/', blank=True, null=True, default="add img")
+    likes = models.ManyToManyField(User, default=None, blank=True)
 
     def __str__(self):
         return self.title
