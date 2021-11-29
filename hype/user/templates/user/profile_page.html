@@ -81,7 +81,7 @@
       <div class="col-lg-7 col-md-6 pl-xl-3">
         <h2 class="font-weight-normal">Biography</h2>
         <p>{{object.bio}}</p>
-        <ul class="col-lg-3 col-md-5 pl-xl-1"><h2>Posts</h2>
+        <ul class="col-lg-3 col-md-5 pl-xl-1"><h2>Posts</h2><h4><a href="{% url 'userposts' %}">SHOW ALL</a></h4>
             {% for pos in post %}
             {% thumbnail pos.img "200x200" crop="center" as img %}
             <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >

@@ -22,6 +22,7 @@
 {% if post.author == author %}
 <h5><a href="{% url 'delete' pk=post.pk %}">DELETE </a></h5>
 <h5><a href="{% url 'new_posT' pk=post.pk %}">UPDATE</a></h5>
+<h5><a href="{% url 'comments' pk=post.pk %}">SHOW ALL</a></h5>
 {% endif %}
 {% endif %}
 {% with total_comment.count as total_comments %}
@@ -51,6 +52,7 @@
         <p><input type="submit" value="Add comment"></p>
     </form>
 {% endif %}
+
 {% endblock %}
 </body>
 </html>

@@ -2,7 +2,7 @@ from django.http import HttpResponse, Http404
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, Post
+from .models import Profile, Post, Comment
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CreateCommentForm
@@ -17,7 +17,6 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     author = Profile.objects.get(login=request.user)
     total_comment = post.comments.all()
-    # anonym_comment = AnonymusComment.objects.all().order_by('-created')[:3]
     comments = post.comments.filter(active=True).order_by('-created')[:3]
     if request.method == 'POST':
         form = CreateCommentForm(request.POST)
@@ -178,7 +177,18 @@ class PeopleList(ListView):
 
 
 
+def CommentList(request, pk):
+    """SHOW ALL COMMENTS"""
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.all().filter(active=True)
+    return render(request, 'user/comment_list.html', {"comments": comments})
 
+
+
+def users_post_list(request):
+    profile = Profile.objects.get(login=request.user)
+    post = Post.objects.all().filter(author=profile)
+    return render(request, "user/user_post_list.html", {"post": post})
 
 
 

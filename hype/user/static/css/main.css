@@ -220,6 +220,16 @@ a.article:hover {
 .detail_btn :hover { background: rgb(0, 191, 255); }
 .detail_btn :active { background: blue; }
 
+.comments{
+  width: 600px;
+  text-align: left;
+  padding:50px;
+  margin:15px 0;
+  border: 2px solid #eee;
+  box-shadow:0 0 10px 4px rgba(0,0,0,0.06);
+  border-radius:10px;
+}
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */

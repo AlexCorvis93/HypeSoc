@@ -1,0 +1,21 @@
+{% extends "user/news.html" %}
+{% load static %}
+{% load thumbnail %}
+<html lang="en">
+<head>
+
+
+</head>
+<body>
+{% block content %}
+{% for comment in comments %}
+<div class="comments">
+    <li>{{comment.text}}</li>
+    <p>{{comment.name}}
+       {{comment.created}}
+    </p>
+</div>
+{% endfor %}
+{% endblock %}
+</body>
+</html>

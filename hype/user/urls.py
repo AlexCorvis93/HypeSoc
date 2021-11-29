@@ -13,6 +13,8 @@ urlpatterns = [
    path("followers/", following, name='following'),# following button
    path('', post_news, name='news'),#news by following users
    path('likes/<int:pk>/', LikeApi.as_view(), name='like'), #LIKES
+   path('comments/<int:pk>/', CommentList, name="comments"),# COMMENTS_LIST
+   path('userposts/', users_post_list, name='userposts'),
 
 ]
 
