@@ -15,6 +15,7 @@ urlpatterns = [
    path('likes/<int:pk>/', LikeApi.as_view(), name='like'), #LIKES
    path('comments/<int:pk>/', CommentList, name="comments"),# COMMENTS_LIST
    path('userposts/', users_post_list, name='userposts'),
+   path('version/', personalPage, name='version'),
 
 ]
 

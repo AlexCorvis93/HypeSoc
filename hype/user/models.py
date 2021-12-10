@@ -34,7 +34,7 @@ Category_choices = [
 
 class Post(models.Model):
     """create and show post"""
-    title = models.CharField(max_length=140)
+    title = models.CharField(max_length=150)
     text = models.TextField(verbose_name='text')
     category = models.PositiveSmallIntegerField('category', choices=Category_choices)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None)
@@ -51,7 +51,7 @@ class Comment(models.Model):
     """COMMENTS"""
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     name = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    text = models.TextField(max_length='200')
+    text = models.TextField(max_length='300')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)

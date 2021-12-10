@@ -83,7 +83,7 @@ def personalPage(request):
     profile = Profile.objects.get(login=request.user)
     person = Profile.objects.all()
     post = Post.objects.all().filter(author=profile).order_by('-public_time')[:3]
-    return render(request, "user/profile_page.html", {"object": profile, "post": post, "person": person})
+    return render(request, "user/version.html", {"object": profile, "post": post, "person": person})
 
 
 def post_news(request):
@@ -189,8 +189,6 @@ def users_post_list(request):
     profile = Profile.objects.get(login=request.user)
     post = Post.objects.all().filter(author=profile)
     return render(request, "user/user_post_list.html", {"post": post})
-
-
 
 
 
