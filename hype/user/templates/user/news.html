@@ -29,9 +29,6 @@
                             <a href="{% url 'news' %}">News</a>
                         </li>
                         <li>
-                            <a href="{% url 'create_post' %}">Create new post</a>
-                        </li>
-                        <li>
                             <a href="/admin/">Admin</a>
                         </li>
                         <li>
@@ -76,7 +73,7 @@
                        data-like="{{post.likes.all.count}}">{{post.likes.all.count}} Likes </a></div>
              <h4><a class="detail_btn" href="{% url 'post_detail' pk=post.pk %}">Detail</a></h4>
             {% if post.author == prof %}
-            <a class="btn-post" href="{% url 'new_posT' pk=post.pk %}">UPDATE</a>
+
             <a class="btn-post" href="{% url 'delete' pk=post.pk %}">DELETE</a>
             {% endif %}
             </div>

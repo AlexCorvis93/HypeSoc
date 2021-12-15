@@ -1,0 +1,147 @@
+{% extends 'user/personal_page.html'%}
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+<html lang="en">
+<head>
+<link rel="stylesheet" href="{% static 'css/version.css'%}" >
+
+
+<script src="https://use.fontawesome.com/5471db396b.js"></script>
+
+</head>
+<body>
+{% block content %}
+<!-- APP WRAPPER --><div class="app app-loaded">
+    <!-- START APP CONTAINER -->
+    <div class="app-container app-sidebar-left-minimized app-header-inside-content">
+
+        <!-- START APP CONTENT -->
+        <div class="app-content app-sidebar-left">
+
+              <!--AVATAR-->
+
+            <div class="app-heading app-heading-background app-heading-light" style= "background-image: url({% static '3.jpg' %})">
+                <div class="contact contact-rounded contact-bordered contact-xlg status-online margin-bottom-0">
+                    {% thumbnail object.ava "61x61" crop="center" as im %}
+          <img src="{{MEDIA_URL}}{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+             {% endthumbnail %}
+                    <div class="contact-container"><a>{{object.name}}</a>
+                        <a>{{object.last_name}}</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END PAGE HEADING --><!-- START PAGE SEPARATED CONTAINER -->
+            <div class="app-content-separate app-content-separated-left"><div class="app-content-separate-left" data-separate-control-height="true" style="height: 1298.7px;">
+                <div class="app-content-separate-panel padding-20 visible-mobile">
+                    <div class="pull-left"><h4 class="text-sm text-uppercase text-bolder margin-bottom-0">Visible On Mobile</h4>
+                        <p class="subheader">Use this panel to control this sidebar</p></div>
+                    <button class="btn btn-default btn-icon pull-right" data-separate-toggle-panel=".app-content-separate-left">
+                        <span class="icon-menu"></span></button></div><div class="app-content-separate-content padding-20"><div class="list-group list-group-noborder">
+                <div class="list-group-title">Навигация:</div>
+                <a  href="{% url 'personal_page' %}" class="list-group-item text-bold">Мой профиль</a>
+                <a href="{% url 'news' %}" class="list-group-item text-bold">Лента новостей</a>
+                <a  href="/admin/" class="list-group-item text-bold">Админка</a>
+                <a  href="/accounts/logout/" class="list-group-item text-bold">Выйти</a>
+            </div>
+                <div class="app-heading app-heading-small heading-transparent">
+                    <div class="title"><h3>Личные данные:</h3>
+                        <p> Email: {{object.email}}</p>
+                        <p> Birthday: {{object.date_birth}}</p>
+                    </div>
+                </div>
+                <h3>Биография:</h3>
+                <p>{{object.bio}}</p>
+            </div>
+            </div>
+                <div class="app-content-separate-content">
+                    <!-- CONTENT CONTAINER -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+                                {% if follow%}
+                                <div class="row margin-bottom-20">
+                                    <div class="col-xs-3">
+                                    <form action="{% url 'following' %}" method="POST">
+                                 {% csrf_token %}
+                                <input type="hidden" name="profile_pk" value={{object.pk}}>
+                               <button class="btn btn-primary btn-block btn-icon-fixed"> UNFOLLOW</button>
+                                  </form>
+                                     </div>
+                                     </div>
+                                    {% else %}
+                                 <div class="row margin-bottom-20">
+                                    <div class="col-xs-3">
+                                    <form action="{% url 'following' %}" method="POST">
+                                 {% csrf_token %}
+                                <input type="hidden" name="profile_pk" value={{object.pk}}>
+                               <button class="btn btn-primary btn-block btn-icon-fixed"> FOLLOW</button>
+                                  </form>
+                                     </div>
+                                     </div>
+                                {% endif %}
+
+
+                                <div class="app-timeline">{% for pos in post %}<div class="app-timeline-item">
+                                    <div class="user">
+                                    <img src="{{MEDIA_URL}}{{ object.ava.url }}" width='30' height='30'>
+                                        </div>
+                                    <div class="content">
+                                        <div class="title">
+                                      {% thumbnail pos.img "200x200" crop="center" as img %}
+                                      <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+                                       {% endthumbnail %}
+                                       <h3>{{ pos.title}}</h3>
+                                           <p>{{pos.text}}</p>
+                                       <p>{{pos.public_time}}
+                                        {{pos.category}}
+                                           {{pos.author}}</p>
+                                        <div><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        <a class="like-btn" href="{% url 'like' pk=pos.pk %}"
+                                        data-like="{{pos.likes.all.count}}">{{pos.likes.all.count}} Likes</a>
+                                        </div>
+
+                                       <h4><a href="{% url 'post_detail' pk=pos.pk %}">Comments</a></h4>
+                                    </div>
+                                    </div>
+                                </div>
+                                        {% endfor %}
+                                </div>
+                            </div>
+                           <div class="col-lg-4 col-md-5"><div class="block"><div class="app-heading app-heading-small">
+                                <!-- FRIENDS BLOCK-->
+                                <div><h3>{{object.name}} are following:</h3></div>
+                              </div>
+                                {% for p in object.followers.all %}
+                                <div class="contact contact-rounded contact-bordered contact-lg ">
+                                     {% for person in person %}
+                                   {% if p == person.login %}
+                                  {% thumbnail person.ava "30x30" crop="center" as img %}
+                                        <div class="contact-container"><a href="{% url 'profile_page' pk=person.pk %}">{{person.name}}</a>
+                                        </div>
+                                 <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+                                  {% endthumbnail %}
+                                        <div class="contact-container"><a href="{% url 'profile_page' pk=person.pk %}">{{person.last_name}}</a>
+                                        </div>
+                                    </div>
+                                       {% endif%}
+
+                                      {% endfor %}
+                                      {% endfor %}
+                    <!-- END CONTENT CONTAINER -->
+                </div>
+            </div>
+
+
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            <!-- END PAGE SEPARATED CONTAINER --></div><!-- END APP CONTENT -->
+    </div>
+    {% endblock %}
+</body>
+</html>

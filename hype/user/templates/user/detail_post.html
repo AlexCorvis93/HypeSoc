@@ -1,0 +1,248 @@
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+<head>
+   <!-- META SECTION -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/version.css'%}" >
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js">
+
+    </script>
+    <script src="https://use.fontawesome.com/5471db396b.js"></script>
+</head>
+<body>
+<!-- APP WRAPPER -->
+<div class="app app-loaded">
+    <!-- START APP CONTAINER -->
+    <div class="app-container"><!-- START APP HEADER -->
+        <div class="app-header">
+            {% block person %}
+            <div class="container container-boxed">
+                <ul class="app-header-buttons visible-mobile">
+                    <li><a href="#" class="btn btn-link btn-icon" data-navigation-horizontal-toggle="true"><span class="icon-menu"></span></a></li>
+                </ul>
+                <ul class="app-header-buttons pull-right"><li>
+                    <div class="contact contact-rounded contact-bordered contact-lg contact-ps-controls">
+                         {% thumbnail author.ava "42x42" crop="center" as im %}
+          <img src="{{MEDIA_URL}}{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+             {% endthumbnail %}
+                        <div class="contact-container">
+                            <a href="{% url 'personal_page' %}">{{request.user}}</a>
+                        </div>
+                        <div class="contact-controls">
+
+                        </div>
+                    </div>
+                </li>
+                </ul>
+            </div>
+            {% endblock %}
+        </div><!-- END APP HEADER  --><!-- START APP CONTENT -->
+        <div class="app-content">
+            <div class="app-navigation-horizontal margin-bottom-15">
+                <div class="container container-boxed"><nav>
+                    <ul><li class="openable"><a href="{% url 'personal_page' %}">Профиль </a>
+                    </li>
+                        <li class="openable"><a href="{% url 'news' %}"> Лента новостей </a>
+                        </li>
+                    </ul>
+                </nav>
+                </div>
+            </div>
+            <!-- START PAGE CONTAINER -->
+            {% block content %}
+            <div class="container container-boxed">
+                <div class="app-heading app-heading-bordered margin-top-0 margin-bottom-15">
+                    <div class="title"><h1>
+                    Категория: {{post.get_category_display}}</h1>
+                    </div>
+                </div>
+                <div class="block padding-top-15 typography">
+                    {% thumbnail post.img "600x600" crop="center" as img %}
+                 <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+                     {% endthumbnail %}
+                    <h1>{{post.title}}</h1>
+                    <p class="subheader">Date: {{post.public_time}} Author: {{post.author}}</p>
+                    <p>{{post.text}}</p>
+                    <div><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        <a class="like-btn" href="{% url 'like' pk=post.pk %}"
+                                        data-like="{{pos.likes.all.count}}">{{pos.likes.all.count}} Likes</a></div>
+                    <div class="row">
+                         {% if post.author == author %}
+                        <div class="col-md-4">
+                            <div class="listing margin-bottom-0">
+                                <div class="listing-item margin-bottom-10">
+                                    <h5><a href="{% url 'delete' pk=post.pk %}">DELETE </a></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="listing margin-bottom-0">
+                                <h5><a href="{% url 'update' pk=post.pk %}">UPDATE</a></h5>
+                                <div class="listing-item margin-bottom-10">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="listing margin-bottom-0">
+                        <h5><a href="{% url 'comments' pk=post.pk %}">SHOW ALL</a></h5>
+                        </div>
+                        </div>
+                         {% endif %}
+                    </div>
+                </div>
+                <div class="block block-arrow-top"><div class="app-heading">
+                    <div class="icon"><span class="icon-bubble-dots"></span></div>
+                    <div class="title"><p>{% with total_comment.count as total_comments %}
+                        <h3>{{ total_comments }} comment{{ total_comments|pluralize }}</h3>
+                        {% endwith %}</p>
+                    </div>
+                </div>
+                    <div class="messages messages-comments">
+                        {% for comment in comments %}
+                        <div class="messages-item inbox">
+                          <div class="user">
+                              {% for person in person%}
+                              {% if comment.name == person.login %}
+                              {% thumbnail person.ava "45x45" crop="center" as im %}
+                          <img src="{{MEDIA_URL}}{{ im.url }}"  width="{{ im.width }}" height="{{ im.height }}" >
+                               <a href="{% url 'profile_page' pk=person.pk %}"></a>
+                               {% endthumbnail %}
+                              {% endif %}
+                              {% endfor %}
+                              <p>{{ comment.name }}</p>
+                               </div>
+                               <div class="date">
+                                   <p>{{ comment.created }}</p>
+                               </div>
+                            <div class="text">
+                              <h5>{{ comment.text|linebreaks }}</h5>
+                            </div>
+                              {% empty %}
+                              <h4>There are no comments yet.</h4>
+                             {% endfor %}
+                        </div>
+
+                <div class="block block-arrow-top">
+                    <div class="app-heading title-only">
+
+                        <div class="title"><h2>Оставить комментарий</h2>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                        <form method="post">
+                           {% csrf_token %}
+                           {{ form_comments.text|as_crispy_field  }}
+                        <p><input type="submit" value="Add comment"></p>
+                         </form>
+                    </div>
+                    </div>
+                </div>
+                 </div>
+</div>
+            </div>
+           <!-- END PAGE CONTAINER -->
+        </div><!-- END APP CONTENT -->
+
+    </div>
+
+{% endblock %}
+<!-- END APP CONTAINER --><!-- START APP FOOTER -->
+    <div class="app-footer app-footer-default" id="footer">
+        <div class="container container-boxed"><div class="app-footer-line">
+            <div class="copyright wide text-center">© 2021 Hype. Test project for "Kryptex".</div>
+        </div>
+        </div>
+    </div><!-- END APP FOOTER -->
+</div><!-- END APP WRAPPER -->
+<div class="modal fade" id="modal-thanks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document"><button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true" class="icon-cross"></span>
+    </button>
+        <div class="modal-content">
+            <div class="modal-body"><p class="text-center margin-bottom-20">
+            <img src="assets/images/smile.png" alt="Thank you" style="width: 100px"></p>
+                <h3 id="modal-thanks-heading" class="text-uppercase text-bold text-lg heading-line-below heading-line-below-short text-center"></h3>
+                <p class="text-muted text-center margin-bottom-10">Thank you so much for likes</p>
+                <p class="text-muted text-center">We will do our best to make<br>Boooya template perfect</p>
+                <p class="text-center"><button class="btn btn-success btn-clean" data-dismiss="modal">Continue</button></p>
+            </div>
+        </div>
+    </div>
+</div><!-- IMPORTANT SCRIPTS -->
+<script type="text/javascript" src="js/vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="js/vendor/jquery/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="js/vendor/jquery/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/vendor/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/vendor/moment/moment.min.js"></script>
+<script type="text/javascript" src="js/vendor/customscrollbar/jquery.mCustomScrollbar.min.js"></script>
+<!-- END IMPORTANT SCRIPTS --><!-- APP SCRIPTS --><script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript" src="js/app_plugins.js"></script><script type="text/javascript" src="js/app_demo.js"></script>
+<!-- END APP SCRIPTS -->
+<div class="app-settings">
+    <div class="app-settings-button"><span class="icon-magic-wand"></span></div>
+    <div class="app-settings-themes-header"><span>Header themes</span><div class="app-header-design-default active"></div>
+        <div class="app-header-design-dark"></div>
+        <div class="app-header-design-lightblue"></div>
+        <div class="app-header-design-orange"></div>
+        <div class="app-header-design-blue"></div>
+    </div>
+    <div class="app-settings-themes-navigation"><span>Navigation themes</span><div class="app-navigation-style-default active"></div>
+        <div class="app-navigation-style-light"></div>
+        <div class="app-navigation-style-lightblue"></div>
+        <div class="app-navigation-style-purple"></div>
+        <div class="app-navigation-style-blue"></div>
+    </div>
+    <div class="app-settings-themes-footer"><span>Footer themes</span>
+        <div class="app-footer-default active"></div>
+        <div class="app-footer-dark"></div>
+        <div class="app-footer-light"></div>
+        <div class="app-footer-purple"></div>
+        <div class="app-footer-blue"></div>
+    </div>
+    <p><span>Notice</span><br>It's easy to customize our template. Use /dev/css/<strong>variables.less</strong>
+        file to make Boooya more unique.</p>
+</div>
+
+
+{% block script%}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function updateText(btn, addCount, verb){
+    btn.text(addCount + " " + verb)
+}
+$(".like-btn").click(function(e){
+e.preventDefault()
+var this_ = $(this)
+var likeUrl = this_.attr("href")
+var countLikes = parseInt(this_.attr("data-like"))
+$.ajax({
+  url: likeUrl,
+  method: "GET",
+  data: {},
+  success: function(data){
+    console.log(data)
+    var addLike = countLikes ++
+    var newLike;
+     if (data.liked){
+        newLike= countLikes ++
+        updateText(this_, newLike, "Likes" )
+     }else{
+        newLike = countLikes - 1
+        updateText(this_, newLike, "Likes")
+           }
+    }, error: function(error){
+      console.log(error)
+      console.log("error")
+    }
+    })
+  })
+</script>
+{% endblock %}
+</body>
+
+</html>

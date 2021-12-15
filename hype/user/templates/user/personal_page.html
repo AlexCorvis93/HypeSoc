@@ -1,0 +1,265 @@
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+<link rel="stylesheet" href="{% static 'css/version.css'%}" >
+<!--    <link rel="stylesheet" href="{% static 'css/main.css'%}" >-->
+
+<script src="https://use.fontawesome.com/5471db396b.js"></script>
+
+</head>
+<body>
+{% block content %}
+<!-- APP WRAPPER --><div class="app app-loaded">
+    <!-- START APP CONTAINER -->
+    <div class="app-container app-sidebar-left-minimized app-header-inside-content">
+
+        <!-- START APP CONTENT -->
+        <div class="app-content app-sidebar-left">
+
+              <!--AVATAR-->
+
+            <div class="app-heading app-heading-background app-heading-light" style= "background-image: url({% static '3.jpg' %})">
+                <div class="contact contact-rounded contact-bordered contact-xlg status-online margin-bottom-0">
+                    {% thumbnail object.ava "61x61" crop="center" as im %}
+          <img src="{{MEDIA_URL}}{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+             {% endthumbnail %}
+                    <div class="contact-container"><a>{{object.name}}</a>
+                        <a>{{object.last_name}}</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END PAGE HEADING --><!-- START PAGE SEPARATED CONTAINER -->
+            <div class="app-content-separate app-content-separated-left"><div class="app-content-separate-left" data-separate-control-height="true" style="height: 1298.7px;">
+                <div class="app-content-separate-panel padding-20 visible-mobile">
+                    <div class="pull-left"><h4 class="text-sm text-uppercase text-bolder margin-bottom-0">Visible On Mobile</h4>
+                        <p class="subheader">Use this panel to control this sidebar</p></div>
+                    <button class="btn btn-default btn-icon pull-right" data-separate-toggle-panel=".app-content-separate-left">
+                        <span class="icon-menu"></span></button></div><div class="app-content-separate-content padding-20"><div class="list-group list-group-noborder">
+                <div class="list-group-title">Навигация:</div>
+                <a href="{% url 'news' %}" class="list-group-item text-bold">Лента новостей</a>
+                <a  href="/admin/" class="list-group-item text-bold">Админка</a>
+                <a  href="/accounts/logout/" class="list-group-item text-bold">Выйти</a>
+            </div>
+                <div class="app-heading app-heading-small heading-transparent">
+                    <div class="title"><h3>Личные данные:</h3>
+                        <p>Login: {{object.login}}</p>
+                        <p> Email: {{object.email}}</p>
+                        <p> Birthday: {{object.date_birth}}</p>
+                    </div>
+                </div>
+                <h3>Биография:</h3>
+                <p>{{object.bio}}</p>
+            </div>
+            </div>
+                <div class="app-content-separate-content">
+                    <!-- CONTENT CONTAINER -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+                                <div class="row margin-bottom-20">
+                                </div>
+
+                                <!--FORM POST -->
+                                <div class="block block-condensed padding-top-20">
+
+                                    <div class="block-content">
+                                         <form  method="post" novalidate enctype="multipart/form-data">
+                                           {% csrf_token %}
+                                            {{ form|crispy }}
+                                             <p> <button type="submit">Опубликовать</button></p>
+                                     </form>
+
+
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <div class="app-timeline">{% for pos in post %}<div class="app-timeline-item">
+                                    <div class="user">
+                                    <img src="{{MEDIA_URL}}{{ object.ava.url }}" width='30' height='30'>
+                                        </div>
+                                    <div class="content">
+                                        <div class="title">
+                                      {% thumbnail pos.img "200x200" crop="center" as img %}
+                                      <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+                                       {% endthumbnail %}
+                                       <h3>{{ pos.title}}</h3>
+                                           <p>{{pos.text}}</p>
+                                       <p>{{pos.public_time}}
+                                        {{pos.category}}
+                                           {{pos.author}}</p>
+                                        <div><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        <a class="like-btn" href="{% url 'like' pk=pos.pk %}"
+                                        data-like="{{pos.likes.all.count}}">{{pos.likes.all.count}} Likes</a>
+                                        </div>
+
+                                       <h4><a href="{% url 'post_detail' pk=pos.pk %}">Comments</a></h4>
+                                    </div>
+                                    </div>
+                                </div>
+                                        {% endfor %}
+                                </div>
+                            </div>
+                           <div class="col-lg-4 col-md-5"><div class="block"><div class="app-heading app-heading-small">
+                                <!-- FRIENDS BLOCK-->
+                                <div><h3>You are following:</h3></div>
+                              </div>
+                                {% for p in object.followers.all %}
+                                <div class="contact contact-rounded contact-bordered contact-lg ">
+                                     {% for person in person %}
+                                   {% if p == person.login %}
+                                  {% thumbnail person.ava "30x30" crop="center" as img %}
+                                        <div class="contact-container"><a href="{% url 'profile_page' pk=person.pk %}">{{person.name}}</a>
+                                        </div>
+                                 <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+                                  {% endthumbnail %}
+                                        <div class="contact-container"><a href="{% url 'profile_page' pk=person.pk %}">{{person.last_name}}</a>
+                                        </div>
+                                    </div>
+                                       {% endif%}
+                                      {% endfor %}
+                                      {% endfor %}
+                    <!-- END CONTENT CONTAINER -->
+                </div>
+            </div>
+
+
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            <!-- END PAGE SEPARATED CONTAINER --></div><!-- END APP CONTENT -->
+    </div>
+    {% endblock %}
+    <!-- END APP CONTAINER --><!-- START APP FOOTER -->
+    <div class="app-footer app-footer-default" id="footer"><!--
+                <div class="alert alert-danger alert-dismissible alert-inside text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span class="icon-cross"></span></button>
+                    We use cookies to offer you the best experience on our website. Continuing browsing, you accept our cookies policy.
+                </div>
+                --><div class="app-footer-line extended">
+        <div class="row"><div class="col-md-3 col-sm-4"><h3 class="title">Hype</h3>
+            </div>
+
+            <div class="col-md-2 col-sm-4"><a href="https://github.com/AlexCorvis93"><h3 class="title"> My GitHub
+            </h3></a>
+            </div>
+            <div class="col-md-3 col-sm-6 clear-mobile"><h3 class="title">
+                <div class="row app-footer-articles"><div class="col-md-8 col-sm-4">
+                     <p>
+                        Все это сделано для отработки и демонстрации навыков владения фреймворком django.
+                    </p></div>
+
+                </div>
+                <div class="row app-footer-articles">
+                    <div class="col-md-3 col-sm-4"><img src="/assets/images/preview/img-2.jpg" alt="" class="img-responsive"></div>
+
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-6"><h3 class="title"><span class="icon-thumbs-up">
+
+            </span>
+                Social Media</h3><a href="#" class="label-icon label-icon-footer label-icon-bordered label-icon-rounded label-icon-lg">
+                <i class="fa fa-facebook"></i> </a>
+                <a href="#" class="label-icon label-icon-footer label-icon-bordered label-icon-rounded label-icon-lg">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#" class="label-icon label-icon-footer label-icon-bordered label-icon-rounded label-icon-lg"><i class="fa fa-youtube"></i> </a>
+                <a href="#" class="label-icon label-icon-footer label-icon-bordered label-icon-rounded label-icon-lg"><i class="fa fa-google-plus"></i> </a>
+                <a href="#" class="label-icon label-icon-footer label-icon-bordered label-icon-rounded label-icon-lg"><i class="fa fa-feed"></i></a>
+                <h3 class="title"><span class="icon-paper-plane"></span> Subscribe</h3>
+                <div class="input-group"><div class="input-group-btn">
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="app-footer-line darken">
+            <div class="copyright wide text-center">© 2021 Hype. Test project for "Kryptex"</div>
+        </div>
+    </div>
+    <!-- END APP FOOTER --><!-- START APP SIDEPANEL -->
+    <!-- IMPORTANT SCRIPTS -->
+<script type="text/javascript" src="js/vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="js/vendor/jquery/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="js/vendor/jquery/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/vendor/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/vendor/moment/moment.min.js"></script>
+<script type="text/javascript" src="js/vendor/customscrollbar/jquery.mCustomScrollbar.min.js"></script><!-- END IMPORTANT SCRIPTS --><!-- APP SCRIPTS -->
+<script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript" src="js/app_plugins.js"></script>
+<script type="text/javascript" src="js/app_demo.js"></script>
+<!-- END APP SCRIPTS -->
+
+<div class="app-settings">
+    <div class="app-settings-button">
+        <span class="icon-magic-wand"></span>
+    </div><div class="app-settings-themes-header">
+    <span>Header themes</span><div class="app-header-design-default active"></div>
+    <div class="app-header-design-dark"></div>
+    <div class="app-header-design-lightblue"></div>
+    <div class="app-header-design-orange"></div>
+    <div class="app-header-design-blue"></div>
+</div><div class="app-settings-themes-navigation">
+    <span>Navigation themes</span>
+    <div class="app-navigation-style-default active"></div>
+    <div class="app-navigation-style-light"></div>
+    <div class="app-navigation-style-lightblue"></div>
+    <div class="app-navigation-style-purple"></div>
+    <div class="app-navigation-style-blue"></div>
+</div>
+    <div class="app-settings-themes-footer">
+        <span>Footer themes</span>
+        <div class="app-footer-default active">
+
+        </div>
+        <div class="app-footer-dark"></div>
+        <div class="app-footer-light"></div>
+        <div class="app-footer-purple"></div>
+        <div class="app-footer-blue"></div>
+    </div>
+    <p><span>Notice</span><br>It's easy to customize our template. Use /dev/css/<strong>variables.less</strong> file to make Boooya more unique.</p></div>
+
+{% block script%}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function updateText(btn, addCount, verb){
+    btn.text(addCount + " " + verb)
+}
+$(".like-btn").click(function(e){
+e.preventDefault()
+var this_ = $(this)
+var likeUrl = this_.attr("href")
+var countLikes = parseInt(this_.attr("data-like"))
+$.ajax({
+  url: likeUrl,
+  method: "GET",
+  data: {},
+  success: function(data){
+    console.log(data)
+    var addLike = countLikes ++
+    var newLike;
+     if (data.liked){
+        newLike= countLikes ++
+        updateText(this_, newLike, "Likes" )
+     }else{
+        newLike = countLikes - 1
+        updateText(this_, newLike, "Likes")
+           }
+    }, error: function(error){
+      console.log(error)
+      console.log("error")
+    }
+    })
+  })
+</script>
+{% endblock %}
+</body>
+</html>

@@ -1,21 +1,19 @@
 from django.http import HttpResponse, Http404
-from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 from .models import Profile, Post, Comment
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import CreateCommentForm
+from .forms import CreateCommentForm, PostForm
 from django.views.generic import ListView, DetailView
-from .serializers import PostSerializer
+
 from django.core.paginator import Paginator
 from itertools import chain
-
+from PIL import Image
 
 def post_detail(request, pk):
     """COMMENTS"""
     post = get_object_or_404(Post, pk=pk)
     author = Profile.objects.get(login=request.user)
+    person = Profile.objects.all()
     total_comment = post.comments.all()
     comments = post.comments.filter(active=True).order_by('-created')[:3]
     if request.method == 'POST':
@@ -28,10 +26,41 @@ def post_detail(request, pk):
     else:
         form = CreateCommentForm()
 
-    return render(request, 'user/post_detail.html', {'post': post, 'comments': comments,
+    return render(request, 'user/detail_post.html', {'post': post, 'comments': comments,
                                                      'form_comments': form, "total_comment": total_comment,
-                                                     "author": author,
-                                                     })
+                                                     "author": author, 'person': person})
+
+
+
+def PostCreate(request):
+    profile = Profile.objects.get(login=request.user)
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.author = profile
+            new_post.save()
+        else:
+            form = PostForm()
+    return render(request, "user/personal_page.html", {'form': form})
+
+
+
+def PostApdate(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    profile = Profile.objects.get(login=request.user)
+    if request.method == 'GET':
+        form = PostForm(instance=post)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.author = profile
+            new_post.save()
+        else:
+            form = PostForm()
+    return render(request, "user/apdate_post.html", {'form': form, 'person': profile})
 
 
 
@@ -63,6 +92,7 @@ def following(request):
 class ProfilePage(DetailView):
     """SHOW DETAIL USERS PAGE"""
     model = Profile
+    template_name = 'user/another_profile.html'
 
     def get_context_data(self, *, object_list=None, **kwargs, ):
         context = super(ProfilePage, self).get_context_data(**kwargs)
@@ -83,7 +113,15 @@ def personalPage(request):
     profile = Profile.objects.get(login=request.user)
     person = Profile.objects.all()
     post = Post.objects.all().filter(author=profile).order_by('-public_time')[:3]
-    return render(request, "user/version.html", {"object": profile, "post": post, "person": person})
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.author = profile
+            new_post.save()
+    else:
+        form = PostForm()
+    return render(request, "user/personal_page.html", {"object": profile, "post": post, "person": person, 'form': form})
 
 
 def post_news(request):
@@ -106,60 +144,6 @@ def post_news(request):
     return render(request, 'user/news.html', {'posts': page_obj, 'prof': profile, 'profile_list': pr_list})
 
 
-
-
-
-class New_post(APIView):
-    """FORM POST CREATE API"""
-    serializer_class = PostSerializer
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "user/create_post_api.html"
-    permission_classes = [IsAuthenticated]
-
-
-    def perform_create(self, serializer):
-        profile = Profile.objects.get(login=self.request.user)
-        serializer.save(author=profile.name)
-
-    def get(self, request):
-          serializer = PostSerializer()
-          return Response({'serializer': serializer})
-
-    def post(self, request):
-        profile = Profile.objects.get(login=self.request.user)
-        serializer = PostSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response({"serializer": serializer})
-        post = serializer.save(author=profile)
-        return redirect('new_posT', pk=post.pk)
-
-
-class NewPostDetail(APIView):
-    """GET UPDATE post REST_Framework"""
-    permission_classes = [IsAuthenticated]
-    serializer_class = PostSerializer
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "user/new_api_post.html"
-
-    def get_object(self, pk):
-        try:
-            return get_object_or_404(Post, pk=pk)
-        except Post.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        serializer = PostSerializer(post)
-        return Response({'serializer': serializer, 'post': post})
-
-    def post(self, request, pk, format=None):
-        post = get_object_or_404(Post, pk=pk)
-        serializer = PostSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'serializer': serializer, "post": post})
-        serializer.save()
-        return redirect('post_detail')
 
 
 class PeopleList(ListView):
