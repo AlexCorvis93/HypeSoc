@@ -1,21 +1,68 @@
-{% extends "user/news.html" %}
+{% extends "user/detail_post.html" %}
 {% load static %}
 {% load thumbnail %}
 <html lang="en">
 <head>
-
-
 </head>
 <body>
+{% block person %}
+            <div class="container container-boxed">
+                <ul class="app-header-buttons visible-mobile">
+                    <li><a href="#" class="btn btn-link btn-icon" data-navigation-horizontal-toggle="true"><span class="icon-menu"></span></a></li>
+                </ul>
+                <ul class="app-header-buttons pull-right"><li>
+                    <div class="contact contact-rounded contact-bordered contact-lg contact-ps-controls">
+                        {% for person in person %}
+                        {% if person.login == request.user%}
+                         {% thumbnail person.ava "42x42" crop="center" as im %}
+          <img src="{{MEDIA_URL}}{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+             {% endthumbnail %}
+                        <div class="contact-container">
+                            <a href="{% url 'personal_page' %}">{{request.user}}</a>
+                        </div>
+                        <div class="contact-controls">
+
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </li>
+                </ul>
+            </div>
+            {% endblock %}
 {% block content %}
-{% for comment in comments %}
-<div class="comments">
-    <li>{{comment.text}}</li>
-    <p>{{comment.name}}
-       {{comment.created}}
-    </p>
+<div class="block block-arrow-top"><div class="app-heading">
+    <div class="icon"><span class="icon-bubble-dots"></span></div>
+    <div class="title"><p>{% with comments.count as total_comments %}
+        <h3>{{ total_comments }} comment{{ total_comments|pluralize }}</h3>
+        {% endwith %}</p>
+    </div>
 </div>
-{% endfor %}
+<div class="messages messages-comments">
+    {% for comment in comments %}
+    <div class="messages-item inbox">
+        <div class="user">
+            {% for person in person%}
+            {% if comment.name == person.login %}
+            {% thumbnail person.ava "45x45" crop="center" as im %}
+            <img src="{{MEDIA_URL}}{{ im.url }}"  width="{{ im.width }}" height="{{ im.height }}" >
+            <a href="{% url 'profile_page' pk=person.pk %}"></a>
+            {% endthumbnail %}
+            {% endif %}
+            {% endfor %}
+            <p>{{ comment.name }}</p>
+        </div>
+        <div class="date">
+            <p>{{ comment.created }}</p>
+        </div>
+        <div class="text">
+            <h5>{{ comment.text|linebreaks }}</h5>
+        </div>
+        {% empty %}
+        <h4>There are no comments yet.</h4>
+        {% endfor %}
+    </div>
 {% endblock %}
+</div>
 </body>
 </html>

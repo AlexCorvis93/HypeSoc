@@ -69,7 +69,7 @@ def delete(request, pk):
     try:
         post = get_object_or_404(Post, pk=pk)
         post.delete()
-        return redirect("/")
+        return redirect("news")
     except Post.DoesNotExist:
         return Response("<h2>Post not found</h2>")
 
@@ -138,10 +138,10 @@ def post_news(request):
     posts.append(my_post)
     if len(posts) > 0:
         qs = sorted(chain(*posts), reverse=True, key=lambda obj: obj.title)
-    paginator = Paginator(qs, 3)
+    paginator = Paginator(qs, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'user/news.html', {'posts': page_obj, 'prof': profile, 'profile_list': pr_list})
+    return render(request, 'user/news2.html', {'posts': page_obj, 'prof': profile, 'profile_list': pr_list})
 
 
 
@@ -165,7 +165,8 @@ def CommentList(request, pk):
     """SHOW ALL COMMENTS"""
     post = get_object_or_404(Post, pk=pk)
     comments = post.comments.all().filter(active=True)
-    return render(request, 'user/comment_list.html', {"comments": comments})
+    person = Profile.objects.all()
+    return render(request, 'user/comment_list.html', {"comments": comments, 'person': person})
 
 
 

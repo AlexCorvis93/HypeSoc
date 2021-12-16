@@ -78,8 +78,6 @@
 
 
 
-
-
                                 <div class="app-timeline">{% for pos in post %}<div class="app-timeline-item">
                                     <div class="user">
                                     <img src="{{MEDIA_URL}}{{ object.ava.url }}" width='30' height='30'>
@@ -92,7 +90,7 @@
                                        <h3>{{ pos.title}}</h3>
                                            <p>{{pos.text}}</p>
                                        <p>{{pos.public_time}}
-                                        {{pos.category}}
+                                        {{pos.get_category_display}}
                                            {{pos.author}}</p>
                                         <div><i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                         <a class="like-btn" href="{% url 'like' pk=pos.pk %}"
@@ -137,6 +135,40 @@
                     </div>
             <!-- END PAGE SEPARATED CONTAINER --></div><!-- END APP CONTENT -->
     </div>
+    {% block script%}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function updateText(btn, addCount, verb){
+    btn.text(addCount + " " + verb)
+}
+$(".like-btn").click(function(e){
+e.preventDefault()
+var this_ = $(this)
+var likeUrl = this_.attr("href")
+var countLikes = parseInt(this_.attr("data-like"))
+$.ajax({
+  url: likeUrl,
+  method: "GET",
+  data: {},
+  success: function(data){
+    console.log(data)
+    var addLike = countLikes ++
+    var newLike;
+     if (data.liked){
+        newLike= countLikes ++
+        updateText(this_, newLike, "Likes" )
+     }else{
+        newLike = countLikes - 1
+        updateText(this_, newLike, "Likes")
+           }
+    }, error: function(error){
+      console.log(error)
+      console.log("error")
+    }
+    })
+  })
+</script>
+{% endblock %}
     {% endblock %}
     <!-- END APP CONTAINER --><!-- START APP FOOTER -->
     <div class="app-footer app-footer-default" id="footer"><!--
@@ -227,39 +259,5 @@
     </div>
     <p><span>Notice</span><br>It's easy to customize our template. Use /dev/css/<strong>variables.less</strong> file to make Boooya more unique.</p></div>
 
-{% block script%}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-function updateText(btn, addCount, verb){
-    btn.text(addCount + " " + verb)
-}
-$(".like-btn").click(function(e){
-e.preventDefault()
-var this_ = $(this)
-var likeUrl = this_.attr("href")
-var countLikes = parseInt(this_.attr("data-like"))
-$.ajax({
-  url: likeUrl,
-  method: "GET",
-  data: {},
-  success: function(data){
-    console.log(data)
-    var addLike = countLikes ++
-    var newLike;
-     if (data.liked){
-        newLike= countLikes ++
-        updateText(this_, newLike, "Likes" )
-     }else{
-        newLike = countLikes - 1
-        updateText(this_, newLike, "Likes")
-           }
-    }, error: function(error){
-      console.log(error)
-      console.log("error")
-    }
-    })
-  })
-</script>
-{% endblock %}
 </body>
 </html>

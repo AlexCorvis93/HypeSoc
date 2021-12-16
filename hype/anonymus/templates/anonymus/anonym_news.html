@@ -1,12 +1,9 @@
-{% extends "user/news.html" %}
+{% extends "user/detail_post.html" %}
 {% load rest_framework %}
 {% load static %}
 {% load thumbnail %}
 <html lang="en">
 <html lang="en"><head>
-    <title>Post</title>
- <link rel="stylesheet" href="{% static 'css/main.css'%}" >
- <script src="{% static 'js/script.js' %}"></script>
 
  </head>
 <html lang="en">
@@ -15,29 +12,121 @@
     <title>News</title>
 </head>
 <body>
-<div id="content">
-         {% block content %}
-            {% for post in post %}
-             {% thumbnail post.img "500x500" crop="center" as img %}
-            <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
-             {% endthumbnail %}
-            <h2>{{post.title}}</h2>
-            <p>{{post.text}}</p>
-             <h4> {{post.author}}</h4>
-            <p>{{post.public_time}}</p>
-            <p>{{post.get_category_display}}</p>
-             <h4><a href="{% url 'post' pk=post.pk %}">Detail</a></h4>
-            <div class="line"></div>
-            {% endfor %}
-            <div class="pagination">
-<span class="step-links">
-    {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">Previos</a>
-    {% endif %}
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">NEXT</a>
-    {% endif %}
-                {% endblock %}
-</div>
+{% block person %}
+            <div class="container container-boxed">
+                <ul class="app-header-buttons visible-mobile">
+                    <li><a href="#" class="btn btn-link btn-icon" data-navigation-horizontal-toggle="true"><span class="icon-menu"></span></a></li>
+                </ul>
+                <ul class="app-header-buttons pull-right"><li>
+                    <div class="contact contact-rounded contact-bordered contact-lg contact-ps-controls">
+                        {% if user.is_authenticated %}
+                        {% for profile in profile%}
+                        {% if profile.login == request.user %}
+                        {% thumbnail profile.ava "42x42" crop="center" as im %}
+                      <img src="{{MEDIA_URL}}{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+                        {% endthumbnail %}
+                          {% endif %}
+                        {% endfor %}
+                        {% else %}
+                       <img src="{% static 'logo.png' %}" width="40" height="40" >
+                        {% endif %}
+                        <div class="contact-container">
+                            <a>{{request.user}}</a>
+                        </div>
+                        <div class="contact-controls">
+                        </div>
+                    </div>
+                </li>
+                </ul>
+            </div>
+            {% endblock %}
+{% block navigation %}
+<div class="app-navigation-horizontal margin-bottom-15">
+     {% if user.is_authenticated %}
+                <div class="container container-boxed"><nav>
+
+                    <ul><li class="openable"><a href="{% url 'personal_page'%}">Профиль</a>
+                    </li>
+                        <li class="openable"><a href="{% url 'news' %}"> Мои новости </a>
+                        </li>
+                        <li class="openable"><a href="/accounts/logout/"> Выйти </a>
+                        </li>
+                    </ul>
+                </nav>
+                </div>
+            </div>
+              {% else %}
+             <div class="container container-boxed"><nav>
+
+                    <ul><li class="openable"><a href="/accounts/login">Войти</a>
+                    </li>
+
+                    </ul>
+                </nav>
+                </div>
+            </div>
+     {% endif %}
+{% endblock %}
+
+{% block content %}
+        <!-- END APP HEADER  --><!-- START APP CONTENT -->
+        <div class="app-content">
+            <div class="app-navigation-horizontal margin-bottom-15">
+            </div>
+            <!-- START PAGE CONTAINER -->
+            <div class="container container-boxed">
+                <div class="block padding-top-20">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="text-uppercase text-bold text-lg heading-line-below margin-bottom-20">Latest News</h4>
+                            <div class="listing">
+                                {% for post in post %}
+                                <div class="listing-item margin-bottom-10">
+                                    <div class="row"><div class="col-md-4">
+                                        {% thumbnail post.img "500x500" crop="center" as img %}
+                                  <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+                                    {% endthumbnail %}
+                                    </div>
+                                        <div class="col-md-8 padding-top-5">
+                                            <a href="{% url 'post' pk=post.pk %}">{{post.title}}</a>
+                                            <span class="label label-success label-bordered pull-right">{{post.get_category_display}}</span>
+                                            <p>{{ post.text| truncatewords_html:20 }}</p>
+                                            <div><span class="text-muted">{{post.public_time}}</span>
+                                                <a href="{% url 'post' pk=post.pk %}" class="pull-right">Read More...</a>
+                                            </div>
+                                            <div><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        <a class="like-btn" href="{% url 'like' pk=post.pk %}"
+                                        data-like="{{post.likes.all.count}}">{{post.likes.all.count}} Likes</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 {% endfor %}
+
+                            </div>
+                            <div class="app-blog-banner"><img src="assets/banners/default_728x90.jpg" alt="banner"></div>
+                            <div class="listing"><div class="listing-item margin-bottom-10">
+                            </div>
+                            </div>
+                             <div class="row margin-bottom-10"><div class="col-md-4 col-md-offset-4">
+                                {% if page_obj.has_next %}
+                             <a href="?page={{ page_obj.next_page_number }}">
+                                    </a>
+                                  <a href="?page={{ page_obj.paginator.num_pages }}"><button class="btn btn-default btn-clean btn-block">Следующая</button></a>
+                                  {% endif %}
+                                 {% if page_obj.has_previous %}
+                                   <a href="?page=1">&laquo; На первую </a>
+                                 <a href="?page={{ page_obj.previous_page_number }}"><button class="btn btn-default btn-clean btn-block">Предыдущая</button></a>
+                                  {% endif %}
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div><!-- END PAGE CONTAINER -->
+            {% endblock %}
+        </div>
 </body>
 </html>
