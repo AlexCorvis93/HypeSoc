@@ -32,6 +32,7 @@ Category_choices = [
         (3, 'science ')
     ]
 
+
 class Post(models.Model):
     """create and show post"""
     title = models.CharField(max_length=150)

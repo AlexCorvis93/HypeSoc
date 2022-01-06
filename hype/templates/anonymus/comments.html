@@ -1,11 +1,30 @@
 {% extends "user/detail_post.html" %}
 {% load thumbnail %}
+{% load static %}
 {% load crispy_forms_tags %}
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Post</title>
 </head>
+{% block person %}
+            <div class="container container-boxed">
+                <ul class="app-header-buttons visible-mobile">
+
+                </ul>
+                <ul class="app-header-buttons pull-right"><li>
+                    <div class="contact contact-rounded contact-bordered contact-lg contact-ps-controls">
+                      <img src="{% static 'logo.png' %}" width="40" height="40" >
+                        <div class="contact-container">
+                            <a>{{request.user}}</a>
+                        </div>
+                        <div class="contact-controls">
+                        </div>
+                    </div>
+                </li>
+                </ul>
+            </div>
+{% endblock %}
 {% block navigation %}
 <div class="app-navigation-horizontal margin-bottom-15">
      {% if user.is_authenticated %}
@@ -34,6 +53,7 @@
             </div>
      {% endif %}
 {% endblock %}
+
 {% block content %}
             <div class="container container-boxed">
                 <div class="app-heading app-heading-bordered margin-top-0 margin-bottom-15">

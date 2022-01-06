@@ -22,7 +22,7 @@
 
               <!--AVATAR-->
 
-            <div class="app-heading app-heading-background app-heading-light" style= "background-image: url({% static '3.jpg' %})">
+            <div class="app-heading app-heading-background app-heading-light" style= "background-image: url({% static '4.jpg' %})">
                 <div class="contact contact-rounded contact-bordered contact-xlg status-online margin-bottom-0">
                     {% thumbnail object.ava "61x61" crop="center" as im %}
           <img src="{{MEDIA_URL}}{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
@@ -118,18 +118,27 @@
                                 <div class="contact contact-rounded contact-bordered contact-lg ">
                                      {% for person in person %}
                                    {% if p == person.login %}
+
                                   {% thumbnail person.ava "30x30" crop="center" as img %}
+                                    {%if person.login != request.user%}
                                         <div class="contact-container"><a href="{% url 'profile_page' pk=person.pk %}">{{person.name}}</a>
                                         </div>
                                  <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
-                                  {% endthumbnail %}
-                                        <div class="contact-container"><a href="{% url 'profile_page' pk=person.pk %}">{{person.last_name}}</a>
+                                    <div class="contact-container"><a href="{% url 'profile_page' pk=person.pk %}">{{person.last_name}}</a>
                                         </div>
+                                    {%else%}
+                                    <div class="contact-container"><a>Это я</a>
+                                        </div>
+                                    <img src="{{MEDIA_URL}}{{ img.url }}" width="{{ im.width }}" height="{{ im.height }}" >
+                                     <div class="contact-container">
+                                        </div>
+                                    {% endif %}
+                                  {% endthumbnail %}
+
                                     </div>
                                        {% endif%}
                                            {% endfor %}
                                          {% endfor %}
-
 
                     <!-- END CONTENT CONTAINER -->
                 </div>

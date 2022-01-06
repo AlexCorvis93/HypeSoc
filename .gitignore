@@ -1,3 +1,33 @@
-/hype/user/templates/form_html/
 
-/venv/
+# -------------------------------------------------------------------------- #
+# .gitignore - Specifies intentionally untracked files to ignore.
+
+# Python-specific
+venv*/
+__pycache__/
+*.pyc
+.python-version
+.coverage
+
+fabfile/.env
+
+# Exclude all PyCharm files:
+.idea/**
+.idea/workspace.xml
+.idea/runConfigurations/*
+
+## ------------------------ (OS-specific settings) ---------------------------
+# MacOS & Windows
+.DS_Store
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+[Dd]esktop.ini
+$RECYCLE.BIN/
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+.venv/
+.env
+/hype/media/cache/
+/hype/media/posts/
+/hype/media/avatar/

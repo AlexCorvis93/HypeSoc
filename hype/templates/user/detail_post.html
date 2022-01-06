@@ -158,12 +158,14 @@
 
 {% endblock %}
 <!-- END APP CONTAINER --><!-- START APP FOOTER -->
+    {% block footer %}
     <div class="app-footer app-footer-default" id="footer">
         <div class="container container-boxed"><div class="app-footer-line">
             <div class="copyright wide text-center">© 2021 Hype. Test project for "Kryptex".</div>
         </div>
         </div>
-    </div><!-- END APP FOOTER -->
+    </div>
+     {% endblock %}<!-- END APP FOOTER -->
 </div><!-- END APP WRAPPER -->
 <div class="modal fade" id="modal-thanks" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document"><button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -190,13 +192,6 @@
 <script type="text/javascript" src="js/app_plugins.js"></script><script type="text/javascript" src="js/app_demo.js"></script>
 <!-- END APP SCRIPTS -->
 <div class="app-settings">
-    <div class="app-settings-button"><span class="icon-magic-wand"></span></div>
-    <div class="app-settings-themes-header"><span>Header themes</span><div class="app-header-design-default active"></div>
-        <div class="app-header-design-dark"></div>
-        <div class="app-header-design-lightblue"></div>
-        <div class="app-header-design-orange"></div>
-        <div class="app-header-design-blue"></div>
-    </div>
     <div class="app-settings-themes-navigation"><span>Navigation themes</span><div class="app-navigation-style-default active"></div>
         <div class="app-navigation-style-light"></div>
         <div class="app-navigation-style-lightblue"></div>

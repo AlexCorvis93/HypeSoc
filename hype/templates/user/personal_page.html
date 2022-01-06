@@ -20,7 +20,7 @@
 
               <!--AVATAR-->
 
-            <div class="app-heading app-heading-background app-heading-light" style= "background-image: url({% static '3.jpg' %})">
+            <div class="app-heading app-heading-background app-heading-light" style= "background-image: url({% static '4.jpg' %})">
                 <div class="contact contact-rounded contact-bordered contact-xlg status-online margin-bottom-0">
                     {% thumbnail object.ava "61x61" crop="center" as im %}
           <img src="{{MEDIA_URL}}{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" >
@@ -34,10 +34,8 @@
             <!-- END PAGE HEADING --><!-- START PAGE SEPARATED CONTAINER -->
             <div class="app-content-separate app-content-separated-left"><div class="app-content-separate-left" data-separate-control-height="true" style="height: 1298.7px;">
                 <div class="app-content-separate-panel padding-20 visible-mobile">
-                    <div class="pull-left"><h4 class="text-sm text-uppercase text-bolder margin-bottom-0">Visible On Mobile</h4>
-                        <p class="subheader">Use this panel to control this sidebar</p></div>
-                    <button class="btn btn-default btn-icon pull-right" data-separate-toggle-panel=".app-content-separate-left">
-                        <span class="icon-menu"></span></button></div><div class="app-content-separate-content padding-20"><div class="list-group list-group-noborder">
+
+                    </div><div class="app-content-separate-content padding-20"><div class="list-group list-group-noborder">
                 <div class="list-group-title">Навигация:</div>
                 <a href="{% url 'news' %}" class="list-group-item text-bold">Лента новостей</a>
                 <a  href="/admin/" class="list-group-item text-bold">Админка</a>
@@ -231,9 +229,7 @@ $.ajax({
 <!-- END APP SCRIPTS -->
 
 <div class="app-settings">
-    <div class="app-settings-button">
-        <span class="icon-magic-wand"></span>
-    </div><div class="app-settings-themes-header">
+    <div class="app-settings-themes-header">
     <span>Header themes</span><div class="app-header-design-default active"></div>
     <div class="app-header-design-dark"></div>
     <div class="app-header-design-lightblue"></div>

@@ -1,13 +1,12 @@
-from django.http import HttpResponse, Http404
-from .models import Profile, Post, Comment
 from rest_framework.response import Response
+from .models import Profile, Post, Comment
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CreateCommentForm, PostForm
 from django.views.generic import ListView, DetailView
-
 from django.core.paginator import Paginator
 from itertools import chain
 from PIL import Image
+
 
 def post_detail(request, pk):
     """COMMENTS"""
@@ -31,22 +30,7 @@ def post_detail(request, pk):
                                                      "author": author, 'person': person})
 
 
-
-def PostCreate(request):
-    profile = Profile.objects.get(login=request.user)
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_post = form.save(commit=False)
-            new_post.author = profile
-            new_post.save()
-        else:
-            form = PostForm()
-    return render(request, "user/personal_page.html", {'form': form})
-
-
-
-def PostApdate(request, pk):
+def PostUpdate(request, pk):
     post = get_object_or_404(Post, pk=pk)
     profile = Profile.objects.get(login=request.user)
     if request.method == 'GET':
@@ -61,7 +45,6 @@ def PostApdate(request, pk):
         else:
             form = PostForm()
     return render(request, "user/apdate_post.html", {'form': form, 'person': profile})
-
 
 
 def delete(request, pk):
@@ -86,7 +69,7 @@ def following(request):
         else:
             my_profile.followers.add(obj.login)
         return redirect(request.META.get("HTTP_REFERER"))
-    return redirect('main')
+
 
 
 class ProfilePage(DetailView):
@@ -144,8 +127,6 @@ def post_news(request):
     return render(request, 'user/news2.html', {'posts': page_obj, 'prof': profile, 'profile_list': pr_list})
 
 
-
-
 class PeopleList(ListView):
     """USERS LIST for search people"""
     model = Profile
@@ -158,16 +139,12 @@ class PeopleList(ListView):
         return context
 
 
-
-
-
 def CommentList(request, pk):
     """SHOW ALL COMMENTS"""
     post = get_object_or_404(Post, pk=pk)
     comments = post.comments.all().filter(active=True)
     person = Profile.objects.all()
     return render(request, 'user/comment_list.html', {"comments": comments, 'person': person})
-
 
 
 def users_post_list(request):
