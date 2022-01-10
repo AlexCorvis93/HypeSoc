@@ -1,6 +1,6 @@
 
 # Python-specific
-venv*/
+venv/
 __pycache__/
 *.pyc
 
@@ -26,8 +26,12 @@ fabfile/.env
 .idea/workspace.xml
 .idea/runConfigurations/
 
-./hype/media/avatar/
-./hype/media/cache/
-./hype/media/posts/
+/hype/media/avatar
+/hype/media/cache
+/hype/media/posts
+
+
 
 .env
+
+fabfile.py
