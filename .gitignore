@@ -30,7 +30,7 @@ fabfile/.env
 /hype/media/cache
 /hype/media/posts
 
-
+venv
 
 .env
 
