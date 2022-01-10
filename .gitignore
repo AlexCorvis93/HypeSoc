@@ -22,9 +22,9 @@ __pycache__/
 fabfile/.env
 
 # Exclude all PyCharm files:
-.idea/**
+.idea/
 .idea/workspace.xml
-.idea/runConfigurations/*
+.idea/runConfigurations/
 
 ./hype/media/avatar/
 ./hype/media/cache/
