@@ -47,6 +47,13 @@ Installation dependencies:
 
 Don`t forget change setting.py DATABASES = {}
 
+SETTING PROJECT:
+
+* ~/myprojectdir/manage.py makemigrations
+* ~/myprojectdir/manage.py migrate
+* python manage.py createsuperuser
+
+
 
 
 
