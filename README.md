@@ -45,7 +45,15 @@ Example: (env) user@user-System-Product-Name:~/Hype$
 Installation dependencies:
 * pip install -r requirements.txt
 
-Don`t forget change setting.py DATABASES = {}
+Don`t forget change setting.py and create '.env'  for secrets items
+
+Example for '.env':
+
+          SECRET_KEY=writeanydjangosettingskey
+          DB_NAME=hype
+          DB_USER=databaseuser
+          DB_PASS=yourpassword
+          DEBUG=True
 
 SETTING PROJECT:
 
