@@ -8,5 +8,49 @@ Prerequisites:
 * Postgres 
 * Django REST-framework
 
+#Manual installation
+First step for Linux(update Python, installation pip, postgresql and virtual environment):
+* sudo apt update
+* sudo apt -y upgrade
+* sudo apt install -y python3-pip
+* sudo apt install -y python3-venv
+* sudo apt -y install postgresql
+
+
+create work directory and clone repository:
+
+* :~$ cd home/user/Projects/
+* :~$ mkdir Hype/
+* git clone https://github.com/AlexCorvis93/HypeSoc.git
+
+Create DATABASE postgres:
+
+Enter in postgres:
+sudo -u postgres psql
+*      CREATE DATABASE hype;
+*     CREATE USER myuser WITH PASSWORD 'password';
+*      ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
+*     ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed'
+*      ALTER ROLE myprojectuser SET timezone TO 'UTC';
+*     GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;
+
+Exit: \q
+
+CREATE VIRTUAL ENVIRONMENT:
+* python3 -m venv venv
+* source env/bin/activate
+
+Example: (env) user@user-System-Product-Name:~/Hype$
+
+Installation dependencies:
+* pip install -r requirements.txt
+
+Don`t forget change setting.py DATABASES = {}
+
+
+
+
+
+
 
 
