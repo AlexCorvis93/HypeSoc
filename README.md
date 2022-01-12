@@ -21,7 +21,7 @@ create work directory and clone repository:
 
 * :~$ cd home/user/Projects/
 * :~$ mkdir Hype/
-* git clone https://github.com/AlexCorvis93/HypeSoc.git
+* git clone github.com/AlexCorvis93/HypeSoc.git
 
 Create DATABASE postgres:
 
