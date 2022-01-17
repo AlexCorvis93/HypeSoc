@@ -58,10 +58,11 @@
         <div class="text">
             <h5>{{ comment.text|linebreaks }}</h5>
         </div>
+    </div>
         {% empty %}
         <h4>There are no comments yet.</h4>
         {% endfor %}
-    </div>
+
 {% endblock %}
     {% block footer %}
      {% endblock %}

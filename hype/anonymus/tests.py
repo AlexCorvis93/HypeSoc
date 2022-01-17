@@ -50,7 +50,8 @@ class CommentViewTest(TestCase):
 
     def test_comment_view(self):
         pk = self.post.pk
-        self.detail = client.get('/post/' + str(pk))
-        self.assertEqual(self.detail.status_code, 200)
-        client.post(self.detail, {'text': 'comment text'})
+        self.detail_post_url = reverse('post', args=[str(pk)])
+        response = client.get(self.detail_post_url)
+        self.assertEqual(response.status_code, 200)
+        client.post(self.detail_post_url, {'text': 'comment text'})
         self.assertEqual(Comment.objects.first().text, 'comment text')

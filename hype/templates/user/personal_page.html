@@ -5,7 +5,7 @@
 <head>
 <link rel="stylesheet" href="{% static 'css/version.css'%}" >
 <!--    <link rel="stylesheet" href="{% static 'css/main.css'%}" >-->
-
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <script src="https://use.fontawesome.com/5471db396b.js"></script>
 
 </head>
@@ -66,16 +66,18 @@
                                     <div class="block-content">
                                          <form  method="post" novalidate enctype="multipart/form-data">
                                            {% csrf_token %}
-                                            {{ form|crispy }}
-                                             <p> <button type="submit">Опубликовать</button></p>
+                                             <div class="form-group">
+                                            {{ form|crispy}}
+                                             </div>
+                                             <div class="'input-group-btn">
+                                              <button class="label label-primary label-bordered pull-right-"  type="submit">Опубликовать</button>
+                                             </div>
                                      </form>
-
-
                                     </div>
                                 </div>
-
-
-
+                                <div class="btn btn-primary btn-block btn-icon-fixed">
+                            <h4><a href="{% url 'users_post' %}"> SHOW ALL POSTS</a></h4>
+                                </div>
                                 <div class="app-timeline">{% for pos in post %}<div class="app-timeline-item">
                                     <div class="user">
                                     <img src="{{MEDIA_URL}}{{ object.ava.url }}" width='30' height='30'>
@@ -95,7 +97,9 @@
                                         data-like="{{pos.likes.all.count}}">{{pos.likes.all.count}} Likes</a>
                                         </div>
 
-                                       <h4><a href="{% url 'post_detail' pk=pos.pk %}">Comments</a></h4>
+                                           <h3><a class="btn btn-primary btn-clean" href="{% url 'post_detail' pk=pos.pk %}">Comments</a></h3>
+
+
                                     </div>
                                     </div>
                                 </div>

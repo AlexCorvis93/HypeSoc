@@ -27,20 +27,20 @@
 {% endblock %}
 {% block navigation %}
 <div class="app-navigation-horizontal margin-bottom-15">
-     {% if user.is_authenticated %}
-                <div class="container container-boxed"><nav>
+<!--     {% if user.is_authenticated %}-->
+<!--                <div class="container container-boxed"><nav>-->
 
-                    <ul><li class="openable"><a href="{% url 'personal_page'%}">Профиль</a>
-                    </li>
-                        <li class="openable"><a href="{% url 'news' %}"> Мои новости </a>
-                        </li>
-                        <li class="openable"><a href="/accounts/logout/"> Выйти </a>
-                        </li>
-                    </ul>
-                </nav>
-                </div>
-            </div>
-              {% else %}
+<!--                    <ul><li class="openable"><a href="{% url 'personal_page'%}">Профиль</a>-->
+<!--                    </li>-->
+<!--                        <li class="openable"><a href="{% url 'news' %}"> Мои новости </a>-->
+<!--                        </li>-->
+<!--                        <li class="openable"><a href="/accounts/logout/"> Выйти </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </nav>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--              {% else %}-->
              <div class="container container-boxed"><nav>
 
                     <ul><li class="openable"><a href="/accounts/login">Войти</a>
@@ -51,7 +51,7 @@
                 </nav>
                 </div>
             </div>
-     {% endif %}
+<!--     {% endif %}-->
 {% endblock %}
 
 {% block content %}
@@ -71,27 +71,11 @@
                     <div><i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         <a class="like-btn" href="{% url 'like' pk=post.pk %}" data-like="{{post.likes.all.count}}">{{post.likes.all.count}} Likes</a></div>
                     <div class="row">
-                         {% if post.author == author %}
-                        <div class="col-md-4">
-                            <div class="listing margin-bottom-0">
-                                <div class="listing-item margin-bottom-10">
-                                    <h5><a href="{% url 'delete' pk=post.pk %}">DELETE </a></h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="listing margin-bottom-0">
-                                <h5><a href="{% url 'update' pk=post.pk %}">UPDATE</a></h5>
-                                <div class="listing-item margin-bottom-10">
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-4">
                             <div class="listing margin-bottom-0">
                         <h5><a href="{% url 'comments' pk=post.pk %}">SHOW ALL COMMENTS</a></h5>
                         </div>
                         </div>
-                         {% endif %}
                     </div>
                 </div>
                 <div class="block block-arrow-top"><div class="app-heading">
@@ -121,10 +105,11 @@
                             <div class="text">
                               <h5>{{ comment.text|linebreaks }}</h5>
                             </div>
+                             </div>
                               {% empty %}
                               <h4>There are no comments yet.</h4>
                              {% endfor %}
-                        </div>
+
 
                 <div class="block block-arrow-top">
                     <div class="app-heading title-only">

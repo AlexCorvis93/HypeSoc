@@ -100,7 +100,8 @@
                               {% endif %}
                     </div>
                 </div>
-                <div class="block block-arrow-top"><div class="app-heading">
+                <div class="block block-arrow-top">
+                    <div class="app-heading">
                     <div class="icon"><span class="icon-bubble-dots"></span></div>
                     <div class="title"><p>{% with total_comment.count as total_comments %}
                         <h3>{{ total_comments }} comment{{ total_comments|pluralize }}</h3>
@@ -108,7 +109,7 @@
                     </div>
                 </div>
                     <div class="messages messages-comments">
-                        {% for comment in comments %}
+                         {% for comment in comments %}
                         <div class="messages-item inbox">
                           <div class="user">
                               {% for person in person%}
@@ -117,8 +118,11 @@
                           <img src="{{MEDIA_URL}}{{ im.url }}"  width="{{ im.width }}" height="{{ im.height }}" >
                                <a href="{% url 'profile_page' pk=person.pk %}"></a>
                                {% endthumbnail %}
-                              {% endif %}
+                               {% endif %}
                               {% endfor %}
+                              {% if comment.name == anonymus.user %}
+                              <img src="{% static 'logo.png' %}" width="40" height="40" >
+                              {% endif%}
                               <p>{{ comment.name }}</p>
                                </div>
                                <div class="date">
@@ -127,11 +131,14 @@
                             <div class="text">
                               <h5>{{ comment.text|linebreaks }}</h5>
                             </div>
+                             </div>
                               {% empty %}
                               <h4>There are no comments yet.</h4>
-                             {% endfor %}
-                        </div>
 
+                         {% endfor %}
+
+                    </div>
+                    </div>
                 <div class="block block-arrow-top">
                     <div class="app-heading title-only">
 
@@ -148,7 +155,7 @@
                     </div>
                     </div>
                 </div>
-                 </div>
+
 </div>
             </div>
            <!-- END PAGE CONTAINER -->
@@ -208,37 +215,37 @@
 </div>
 {% block script%}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-function updateText(btn, addCount, verb){
-    btn.text(addCount + " " + verb)
-}
-$(".like-btn").click(function(e){
-e.preventDefault()
-var this_ = $(this)
-var likeUrl = this_.attr("href")
-var countLikes = parseInt(this_.attr("data-like"))
-$.ajax({
-  url: likeUrl,
-  method: "GET",
-  data: {},
-  success: function(data){
-    console.log(data)
-    var addLike = countLikes ++
-    var newLike;
-     if (data.liked){
-        newLike= countLikes ++
-        updateText(this_, newLike, "Likes" )
-     }else{
-        newLike = countLikes - 1
-        updateText(this_, newLike, "Likes")
-           }
-    }, error: function(error){
-      console.log(error)
-      console.log("error")
-    }
-    })
-  })
-</script>
+<!--<script>-->
+<!--function updateText(btn, addCount, verb){-->
+<!--    btn.text(addCount + " " + verb)-->
+<!--}-->
+<!--$(".like-btn").click(function(e){-->
+<!--e.preventDefault()-->
+<!--var this_ = $(this)-->
+<!--var likeUrl = this_.attr("href")-->
+<!--var countLikes = parseInt(this_.attr("data-like"))-->
+<!--$.ajax({-->
+<!--  url: likeUrl,-->
+<!--  method: "GET",-->
+<!--  data: {},-->
+<!--  success: function(data){-->
+<!--    console.log(data)-->
+<!--    var addLike = countLikes ++-->
+<!--    var newLike;-->
+<!--     if (data.liked){-->
+<!--        newLike= countLikes ++-->
+<!--        updateText(this_, newLike, "Likes" )-->
+<!--     }else{-->
+<!--        newLike = countLikes - 1-->
+<!--        updateText(this_, newLike, "Likes")-->
+<!--           }-->
+<!--    }, error: function(error){-->
+<!--      console.log(error)-->
+<!--      console.log("error")-->
+<!--    }-->
+<!--    })-->
+<!--  })-->
+<!--</script>-->
 {% endblock %}
 </body>
 

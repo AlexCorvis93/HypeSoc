@@ -150,10 +150,15 @@ def CommentList(request, pk):
 def users_post_list(request):
     profile = Profile.objects.get(login=request.user)
     post = Post.objects.all().filter(author=profile)
-    return render(request, "user/user_post_list.html", {"post": post})
+    return render(request, "user/all_user_posts.html", {"post": post, 'prof': profile})
 
 
-
+def another_user_post_list(request, pk):
+    """SHOW ALL COMMENTS"""
+    user = get_object_or_404(Profile, pk=pk)
+    post = Post.objects.all().filter(author=user)
+    person = Profile.objects.all()
+    return render(request, 'user/comment_list.html', {"post": post, 'person': user})
 
 
 
