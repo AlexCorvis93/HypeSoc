@@ -245,9 +245,3 @@ class NewsTest(TestCase):
         self.assertEquals(my_post.title, 'TestPost11')
         post_user3 = response.context['posts'].object_list[0]
         self.assertNotEqual(post_user3.title, 'TestPost33')
-
-
-
-
-
-

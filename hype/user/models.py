@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
-    """show and create user profile"""
     login = models.OneToOneField(User, on_delete=models.CASCADE, default='')
     name = models.CharField(max_length=90,  default='')
     last_name = models.CharField(max_length=90,  default='')
@@ -15,12 +14,10 @@ class Profile(models.Model):
     ava = models.ImageField(upload_to='avatar/', blank=True, null=True, default="add photo")
     followers = models.ManyToManyField(User, blank=True, related_name='following')
 
-
     @property
     def is_authenticated(self):
         """examination if user is authentificated"""
         return True
-
 
     def __str__(self):
         return self.name
@@ -34,7 +31,6 @@ Category_choices = [
 
 
 class Post(models.Model):
-    """create and show post"""
     title = models.CharField(max_length=150)
     text = models.TextField(verbose_name='text')
     category = models.PositiveSmallIntegerField('category', choices=Category_choices)
@@ -47,9 +43,7 @@ class Post(models.Model):
         return self.title
 
 
-
 class Comment(models.Model):
-    """COMMENTS"""
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     name = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     text = models.TextField(max_length='300')
@@ -61,6 +55,6 @@ class Comment(models.Model):
         ordering = ('created',)
 
     def __str__(self):
-        return 'Comment by {} on {}'.format(self.name, self.post)
+        return f'Comment by {self.name} on {self.post}'
 
 

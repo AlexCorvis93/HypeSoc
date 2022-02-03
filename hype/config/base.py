@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'user',
     'likes',
     'sorl.thumbnail',# for authosize fhoto
-     'crispy_forms', # style form
+    'crispy_forms',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [

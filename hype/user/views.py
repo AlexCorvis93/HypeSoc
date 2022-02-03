@@ -9,7 +9,7 @@ from PIL import Image
 
 
 def post_detail(request, pk):
-    """COMMENTS"""
+    """COMMENTS AND FULL VERSION POST"""
     post = get_object_or_404(Post, pk=pk)
     author = Profile.objects.get(login=request.user)
     person = Profile.objects.all()
@@ -92,7 +92,7 @@ class ProfilePage(DetailView):
 
 
 def personalPage(request):
-    """PERSONAL PAGE"""
+    """PERSONAL  user PAGE"""
     profile = Profile.objects.get(login=request.user)
     person = Profile.objects.all()
     post = Post.objects.all().filter(author=profile).order_by('-public_time')[:3]
@@ -140,7 +140,7 @@ class PeopleList(ListView):
 
 
 def CommentList(request, pk):
-    """SHOW ALL COMMENTS"""
+    """SHOW ALL COMMENTS on a separate page"""
     post = get_object_or_404(Post, pk=pk)
     comments = post.comments.all().filter(active=True)
     person = Profile.objects.all()
@@ -148,53 +148,15 @@ def CommentList(request, pk):
 
 
 def users_post_list(request):
+    """SHOW ALL USER`s posts on a separate page"""
     profile = Profile.objects.get(login=request.user)
     post = Post.objects.all().filter(author=profile)
     return render(request, "user/all_user_posts.html", {"post": post, 'prof': profile})
 
 
 def another_user_post_list(request, pk):
-    """SHOW ALL COMMENTS"""
+    """SHOW ALL COMMENTS on a separate page"""
     user = get_object_or_404(Profile, pk=pk)
     post = Post.objects.all().filter(author=user)
     person = Profile.objects.all()
     return render(request, 'user/comment_list.html', {"post": post, 'person': user})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

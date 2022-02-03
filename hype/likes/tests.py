@@ -50,4 +50,3 @@ class LikeTest(APITestCase):
         self.assertEqual(response_like_del.status_code, 200)
         self.assertEqual(response_like_del.data['liked'], False)
         self.assertEqual(response_like_del.data['updated'], False)
-
