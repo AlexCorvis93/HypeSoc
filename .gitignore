@@ -1,9 +1,10 @@
 
 # Python-specific
 venv/
-__pycache__/
 *.pyc
-
+/__pycache__
+/app/__pycache__
+*/__pycache__
 # Created by "pyenv" (e.g. "pyenv local 3.8.6 3.7.9"). It's too specific.
 .python-version
 
